@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1086894315480",
+    "firebase_url": "https://pati-98498.firebaseio.com",
+    "project_id": "pati-98498",
+    "storage_bucket": "pati-98498.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086894315480:android:8af10736c75bd3a5f4c4ad",
+        "android_client_info": {
+          "package_name": "com.KU.Pati"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086894315480-p8g5a4jptonhduq7tamta6ek0nhhp1vv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT9f1RblEUwNG-Ow37RbUy9nVCtaJKjw8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086894315480-p8g5a4jptonhduq7tamta6ek0nhhp1vv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1086894315480-7khlsnh10u5i83k66sr0dprgpnpasfk2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.google.firebase.test.ezgi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
