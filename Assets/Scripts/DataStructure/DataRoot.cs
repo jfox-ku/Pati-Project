@@ -7,18 +7,20 @@ using UnityEngine;
 [Serializable] //Serializable means this can be saved as plain text
 public class DataRoot 
 {
-    private bool Initialized = false;
+    //Could have used Enums here but a fixed string representation will be easier
+    //to send to the server and be understood 
+    public const string NEED_TYPE = "need";
+    public const string PROVIDE_TYPE = "provide";
 
-    public string AnimalType;
-    public int AnimalCount;
+    protected bool Initialized = false;
+    protected string DataType;
+   
     //This location variable might be changed to something other than a string,
     //but that object will also be serialazible so won't cause issues
-    public string Location;
     
-    public DataRoot(string Type, int Count, string Loc) {
-        this.AnimalType = Type;
-        this.AnimalCount = Count;
-        this.Location = Loc;
+    
+    public DataRoot(string DataType) {
+        this.DataType = DataType;
         Initialized = true;
 
     }
@@ -26,6 +28,8 @@ public class DataRoot
 
 
     //Returns string representation of this object formatted as a json object
+    //Note: Not sure how this will work with subclasses (NeedData/ProvideData)
+    //They might need their own GetAsJson method.
     public string GetAsJson() {
         return JsonUtility.ToJson(this);
     }

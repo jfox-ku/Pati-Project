@@ -74,4 +74,8 @@ public class Authentication : MonoBehaviour {
             Debug.Log("4");
         
     }
+
+
+    //Add IEnum for Register functionality.
+
 }

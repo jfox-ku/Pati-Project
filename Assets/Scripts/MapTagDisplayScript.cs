@@ -17,8 +17,8 @@ public class MapTagDisplayScript : MonoBehaviour
     public bool ReadAndDisplayNeed(string input) {
         DataRoot toRead = DataRoot.ReadFromJson(input);
         if (toRead.isInit()) {
-
-            UpdateDisplay(toRead.AnimalCount,toRead.Location);
+            //Placeholder until data structure is more defined
+            UpdateDisplay(1,"1,1,1");
             return true;
         } else {
             Debug.LogError("MapTag Display Error: Data is uninitalized.");
