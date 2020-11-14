@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Proyecto26;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,6 +52,7 @@ public class Default_MapPageScript : UIPageScript {
 
     public void AddNeed() {
         AddNeedSubMenu.SetActive(true);
+    
     }
 
     public void ProvideNeed() {
@@ -62,18 +64,21 @@ public class Default_MapPageScript : UIPageScript {
     }
 
 
+
     //Please don't mind the ugly structure of this function
     //We will improve the whole data system during the next work package (beyond week 5)
     //this is solely for testing
     public void SendNeedDataToServer(GameObject submenu) {
 
         NeedSubMenuScript sm = submenu.GetComponent<NeedSubMenuScript>();
+        User user = new User();
         if (sm) { //sm is null if submenu doesn't contain the script (NeedSubMenuScript)
             NeedData nd = sm.ReadData();
             string dat = nd.GetAsJson();
             Debug.Log("NeedData to be sent: " + dat);
-            //send dat to server here
-            //**
+            // It keeps the type and number of animals with the user information in firebase database.
+            RestClient.Put("https://pati-98498.firebaseio.com/ihtiyaçlar"+ dat + ".json", user);
+            
             return;
         }
 
@@ -82,6 +87,13 @@ public class Default_MapPageScript : UIPageScript {
             ProvideData pd = pm.ReadData();
             string dat = pd.GetAsJson();
             Debug.Log("ProvideData to be sent: " + dat);
+            // It keeps the amount of water and the amount of food with the user information in firebase database.
+            RestClient.Put("https://pati-98498.firebaseio.com/mamavesu"+ dat + ".json", user);
+            
+            
+
+
+            
             //send dat to server here
             //**
             return;
