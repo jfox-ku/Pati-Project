@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LoginPageScript : UIPageScript {
-    private string email;
-    private string password;
+    //Private to public static to access email and password in user script.
+    public static string email;
+    public static string password;
 
 
 
