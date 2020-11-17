@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Firebase;
+using Firebase.Database;
+using Firebase.Unity.Editor;
 
 public class Default_MapPageScript : UIPageScript {
     //Could have used an array of buttons here for scalability
@@ -9,6 +12,8 @@ public class Default_MapPageScript : UIPageScript {
     public Button Mama_Button;
     public Button Need_Button;
     public Button Plus_Button;
+    DatabaseReference reference;
+    int id = 0;
 
     //Submenu objects that pop-up to ask for specific inputs
     //(AddNeed pop-up -> animal type and count)
@@ -67,13 +72,26 @@ public class Default_MapPageScript : UIPageScript {
     //this is solely for testing
     public void SendNeedDataToServer(GameObject submenu) {
 
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://pati-98498.firebaseio.com/");
+        reference = FirebaseDatabase.DefaultInstance.RootReference;
+
         NeedSubMenuScript sm = submenu.GetComponent<NeedSubMenuScript>();
         if (sm) { //sm is null if submenu doesn't contain the script (NeedSubMenuScript)
             NeedData nd = sm.ReadData();
             string dat = nd.GetAsJson();
             Debug.Log("NeedData to be sent: " + dat);
+<<<<<<< Updated upstream
             //send dat to server here
             //**
+=======
+
+            reference.Child("Ihtiyaçlar").Child(id.ToString()).SetValueAsync(dat);
+            id++;
+
+            FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").ValueChanged += Script_ValueChanged;
+           
+            
+>>>>>>> Stashed changes
             return;
         }
 
@@ -82,13 +100,25 @@ public class Default_MapPageScript : UIPageScript {
             ProvideData pd = pm.ReadData();
             string dat = pd.GetAsJson();
             Debug.Log("ProvideData to be sent: " + dat);
+<<<<<<< Updated upstream
             //send dat to server here
+=======
+
+            reference.Child("MamaveSu").Child(id.ToString()).SetValueAsync(dat);
+            id++;
+
+            
+>>>>>>> Stashed changes
             //**
             return;
         }
 
 
 
+    }
+
+    private void Script_ValueChanged(object sender, ValueChangedEventArgs e){
+       Debug.Log("Retrieving from database " + e.Snapshot.Child(id.ToString()).GetValue(true).ToString());
     }
 
 }
