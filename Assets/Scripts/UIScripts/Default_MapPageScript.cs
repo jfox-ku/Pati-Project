@@ -91,12 +91,6 @@ public class Default_MapPageScript : UIPageScript {
 
             FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").ValueChanged += Script_ValueChanged;
            
-            
-
-
-            // It keeps the type and number of animals with the user information in firebase database.
-            RestClient.Put("https://pati-98498.firebaseio.com/ihtiyaçlar"+ dat + ".json", user);
-            
 
             return;
         }
@@ -107,10 +101,6 @@ public class Default_MapPageScript : UIPageScript {
             string dat = pd.GetAsJson();
             Debug.Log("ProvideData to be sent: " + dat);
 
-
-
-            // It keeps the amount of water and the amount of food with the user information in firebase database.
-            RestClient.Put("https://pati-98498.firebaseio.com/mamavesu"+ dat + ".json", user);
             
             //send dat to server here
             reference.Child("MamaveSu").Child(id.ToString()).SetValueAsync(dat);
