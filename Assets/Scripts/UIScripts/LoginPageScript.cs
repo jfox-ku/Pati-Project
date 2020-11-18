@@ -6,7 +6,7 @@ public class LoginPageScript : UIPageScript {
     //Private to public static to access email and password in user script.
     public static string email;
     public static string password;
-
+    public Authentication auth;
 
 
 
@@ -19,11 +19,13 @@ public class LoginPageScript : UIPageScript {
         Connect();
 
     }
+    
 
     public void Connect() {
 
         Debug.Log("\n**email: " + email + "\n**Password: " + password);
         //Establish connection to database here
+        auth.LoginButton();
 
     }
 

@@ -9,11 +9,13 @@ public class User
 	//User mail and password
     public string userMail;
     public string userPassword;
+    public string localId;
 
     public User()
     {
     	//It takes email and password from LoginPageScript.
         userMail = LoginPageScript.email;
         userPassword = LoginPageScript.password;
+        
     }
 }

@@ -1,7 +1,10 @@
 fileFormatVersion: 2
 guid: b244cfa0ac83d294aab825a87d76770d
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -834341609156402722
+    second: Untitled-Artwork-10_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -123,11 +126,32 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Untitled-Artwork-10_0
+      rect:
+        serializedVersion: 2
+        x: 717
+        y: 589
+        width: 269
+        height: 238
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed1a7ec1ab2db64f0800000000000000
+      internalID: -834341609156402722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: e2a5752de5cdf3a4bb3cd177e0476312
     internalID: 0
     vertices: []
     indices: 
