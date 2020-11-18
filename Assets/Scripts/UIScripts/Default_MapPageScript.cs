@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
+ 
+   
 
 public class Default_MapPageScript : UIPageScript {
     //Could have used an array of buttons here for scalability
@@ -15,6 +17,9 @@ public class Default_MapPageScript : UIPageScript {
     public Button Plus_Button;
     DatabaseReference reference;
     int id = 0;
+    
+    
+
 
     //Submenu objects that pop-up to ask for specific inputs
     //(AddNeed pop-up -> animal type and count)
@@ -68,7 +73,7 @@ public class Default_MapPageScript : UIPageScript {
         submenu.SetActive(false);
     }
 
-
+    
 
     //Please don't mind the ugly structure of this function
     //We will improve the whole data system during the next work package (beyond week 5)
@@ -86,18 +91,14 @@ public class Default_MapPageScript : UIPageScript {
             Debug.Log("NeedData to be sent: " + dat);
             //send dat to server here
             //**
+
+            // It keeps the type and number of animals with the user id in firebase database.
             reference.Child("Ihtiyaçlar").Child(id.ToString()).SetValueAsync(dat);
             id++;
 
             FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").ValueChanged += Script_ValueChanged;
+
            
-            
-
-
-            // It keeps the type and number of animals with the user information in firebase database.
-            RestClient.Put("https://pati-98498.firebaseio.com/ihtiyaçlar"+ dat + ".json", user);
-            
-
             return;
         }
 
@@ -107,12 +108,7 @@ public class Default_MapPageScript : UIPageScript {
             string dat = pd.GetAsJson();
             Debug.Log("ProvideData to be sent: " + dat);
 
-
-
-            // It keeps the amount of water and the amount of food with the user information in firebase database.
-            RestClient.Put("https://pati-98498.firebaseio.com/mamavesu"+ dat + ".json", user);
-            
-            //send dat to server here
+            // It keeps the amount of water and the amount of food with the user id.
             reference.Child("MamaveSu").Child(id.ToString()).SetValueAsync(dat);
             id++;
 

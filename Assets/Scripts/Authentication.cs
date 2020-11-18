@@ -55,6 +55,13 @@ public class Authentication : MonoBehaviour {
         Debug.Log("LoginPress");
         //Call the login coroutine passing the email and password
         StartCoroutine(Login(emailLoginField.text, passwordLoginField.text));
+         
+        Firebase.Auth.FirebaseUser user = auth.CurrentUser;
+        if (user != null) {
+        string uid = user.UserId;
+        //It prints user id.
+        Debug.Log("user id " + uid);
+}
     }
     
 

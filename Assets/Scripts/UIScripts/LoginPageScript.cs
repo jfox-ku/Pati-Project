@@ -6,7 +6,7 @@ public class LoginPageScript : UIPageScript {
     //Private to public static to access email and password in user script.
     public static string email;
     public static string password;
-
+ 
 
 
 
@@ -19,6 +19,7 @@ public class LoginPageScript : UIPageScript {
         Connect();
 
     }
+    
 
     public void Connect() {
 
