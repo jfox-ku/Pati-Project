@@ -97,7 +97,6 @@ public class Default_MapPageScript : UIPageScript {
             id++;
 
             FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").ValueChanged += Script_ValueChanged;
-
            
             return;
         }
@@ -108,7 +107,6 @@ public class Default_MapPageScript : UIPageScript {
             string dat = pd.GetAsJson();
             Debug.Log("ProvideData to be sent: " + dat);
 
-            // It keeps the amount of water and the amount of food with the user id.
             reference.Child("MamaveSu").Child(id.ToString()).SetValueAsync(dat);
             id++;
 
