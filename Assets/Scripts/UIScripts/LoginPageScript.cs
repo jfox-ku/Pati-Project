@@ -25,6 +25,12 @@ public class LoginPageScript : UIPageScript {
 
         Debug.Log("\n**email: " + email + "\n**Password: " + password);
         //Establish connection to database here
+        //Below is the user to default to, purely to avoid typing it out every time.
+        if(email == "" || password == "") {
+            email = "kedicik@miyav.com";
+            password = "banamama";
+        }
+        auth.setUserData(email, password);
         auth.LoginButton();
 
     }

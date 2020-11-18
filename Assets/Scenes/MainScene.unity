@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -544,8 +544,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dependencyStatus: 0
-  emailLoginField: {fileID: 504084354}
-  passwordLoginField: {fileID: 759367205}
 --- !u!1 &108852985
 GameObject:
   m_ObjectHideFlags: 0
@@ -1570,18 +1568,13 @@ PrefabInstance:
     - target: {fileID: 114478715909612932, guid: e6b749c6d877f4c19a5a5c3c0783d53b, type: 3}
       propertyPath: _tileProvider
       value: 
-      objectReference: {fileID: 2123738365}
+      objectReference: {fileID: 0}
     - target: {fileID: 114478715909612932, guid: e6b749c6d877f4c19a5a5c3c0783d53b, type: 3}
       propertyPath: _options.locationOptions.latitudeLongitude
-      value: 41,168538, 29,057539
+      value: 52.36, 4.87
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6b749c6d877f4c19a5a5c3c0783d53b, type: 3}
---- !u!4 &352186672 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4867834046800562, guid: e6b749c6d877f4c19a5a5c3c0783d53b, type: 3}
-  m_PrefabInstance: {fileID: 352186671}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &367972776
 GameObject:
   m_ObjectHideFlags: 0
@@ -2937,17 +2930,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 729866527}
   m_CullTransparentMesh: 0
---- !u!114 &759367205 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2637902051468104166, guid: ca3e7d179e07d164ea56cebdc01ef40f, type: 3}
-  m_PrefabInstance: {fileID: 2637902051958642627}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &786590242
 GameObject:
   m_ObjectHideFlags: 0
@@ -5692,7 +5674,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1424977908
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8624,49 +8606,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2118474904}
   m_CullTransparentMesh: 0
---- !u!1 &2123738364
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2123738366}
-  - component: {fileID: 2123738365}
-  m_Layer: 0
-  m_Name: TileProvider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2123738365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2123738364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d7ff8ed3b76a4ee5a451d64a5393e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &2123738366
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2123738364}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 352186672}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2637902051958642627
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8678,13 +8617,17 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 97230655}
+    - target: {fileID: 2637902052391427241, guid: ca3e7d179e07d164ea56cebdc01ef40f, type: 3}
+      propertyPath: m_isRightToLeft
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2637902052941560840, guid: ca3e7d179e07d164ea56cebdc01ef40f, type: 3}
       propertyPath: m_Name
       value: Login_page
       objectReference: {fileID: 0}
     - target: {fileID: 2637902052941560840, guid: ca3e7d179e07d164ea56cebdc01ef40f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2637902052941560846, guid: ca3e7d179e07d164ea56cebdc01ef40f, type: 3}
       propertyPath: auth

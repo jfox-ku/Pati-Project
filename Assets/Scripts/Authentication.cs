@@ -16,12 +16,12 @@ public class Authentication : MonoBehaviour {
     public DependencyStatus dependencyStatus;
     public FirebaseAuth auth;
     public FirebaseUser User;
+    
+    public void setUserData(string e,string p) {
+        email = e;
+        password = p;
 
-    //Login variables
-    [Header("Login")]
-    public TMP_InputField emailLoginField;
-    public TMP_InputField passwordLoginField;
-
+    }
 
     void Awake() {
         //Check that all of the necessary dependencies for Firebase are present on the system
@@ -47,7 +47,7 @@ public class Authentication : MonoBehaviour {
     public void LoginButton() {
         Debug.Log("LoginPress");
         //Call the login coroutine passing the email and password
-        StartCoroutine(Login(emailLoginField.text, passwordLoginField.text));
+        StartCoroutine(Login(email, password));
 
 
     }
