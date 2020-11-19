@@ -10,12 +10,14 @@ using TMPro;
 public class Authentication : MonoBehaviour {
     private string email;
     private string password;
+    public static string uid;
 
     //Firebase variables
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
     public FirebaseAuth auth;
     public FirebaseUser User;
+    
     
     public void setUserData(string e,string p) {
         email = e;
@@ -48,8 +50,7 @@ public class Authentication : MonoBehaviour {
         Debug.Log("LoginPress");
         //Call the login coroutine passing the email and password
         StartCoroutine(Login(email, password));
-
-
+    
     }
 
 
@@ -69,7 +70,7 @@ public class Authentication : MonoBehaviour {
 
         Firebase.Auth.FirebaseUser user = auth.CurrentUser;
         if (user != null) {
-            string uid = user.UserId;
+            uid = user.UserId;
             //It prints user id.
             Debug.Log("user id " + uid);
         }
