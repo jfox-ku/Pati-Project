@@ -25,7 +25,11 @@
 
 		List<GameObject> _spawnedObjects;
 
-		void Start()
+        public void SetLocations(string[] inp) {
+            _locationStrings = inp;
+        }
+
+		public void PlaceMapTags()
 		{
 			_locations = new Vector2d[_locationStrings.Length];
 			_spawnedObjects = new List<GameObject>();

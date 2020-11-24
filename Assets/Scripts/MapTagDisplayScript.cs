@@ -13,6 +13,9 @@ public class MapTagDisplayScript : MonoBehaviour
         ReadAndDisplayNeed(input);
     }
 
+    private void Update() {
+        //this.transform.LookAt(Camera.main.transform.position);
+    }
 
     public bool ReadAndDisplayNeed(string input) {
         DataRoot toRead = DataRoot.ReadFromJson(input);
