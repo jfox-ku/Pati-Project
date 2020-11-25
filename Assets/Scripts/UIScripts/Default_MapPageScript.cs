@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Firebase;
 using Firebase.Database;
+using Firebase.Auth;
 using Firebase.Unity.Editor;
  
    
@@ -15,9 +16,8 @@ public class Default_MapPageScript : UIPageScript {
     public Button Mama_Button;
     public Button Need_Button;
     public Button Plus_Button;
-    DatabaseReference reference;
-    int id = 0;
     
+    string uniqueid;
     
 
 
@@ -73,31 +73,40 @@ public class Default_MapPageScript : UIPageScript {
         submenu.SetActive(false);
     }
 
-    
-
+      
+       
+     
     //Please don't mind the ugly structure of this function
     //We will improve the whole data system during the next work package (beyond week 5)
     //this is solely for testing
-    public void SendNeedDataToServer(GameObject submenu) {
+    public async void SendNeedDataToServer(GameObject submenu) {
 
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://pati-98498.firebaseio.com/");
-        reference = FirebaseDatabase.DefaultInstance.RootReference;
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        uniqueid = Authentication.uid;
 
         NeedSubMenuScript sm = submenu.GetComponent<NeedSubMenuScript>();
-        User user = new User();
+        
         if (sm) { //sm is null if submenu doesn't contain the script (NeedSubMenuScript)
-            NeedData nd = sm.ReadData();
-            string dat = nd.GetAsJson();
+             NeedData nd = sm.ReadData();
+             string dat = nd.GetAsJson();
             Debug.Log("NeedData to be sent: " + dat);
-            //send dat to server here
-            //**
 
-            // It keeps the type and number of animals with the user id in firebase database.
-            reference.Child("Ihtiyaçlar").Child(id.ToString()).SetValueAsync(dat);
-            id++;
+        string key = reference.Child("Ihtiyaçlar").Push().Key;
+        await reference.Child("Ihtiyaçlar").Child(key).Child(uniqueid).SetRawJsonValueAsync(dat);
+         
+         FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(key).Child(uniqueid).GetValueAsync().ContinueWith(task => {
+        
+           DataSnapshot snapshot = task.Result;
+            Debug.Log("Retrieving from database " + snapshot);
+          
+    
+      });
+        
 
-            FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").ValueChanged += Script_ValueChanged;
-           
+        // Query query = reference.OrderByKey();
+
+        // FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").ValueChanged += Script_ValueChanged;
+            
             return;
         }
 
@@ -107,21 +116,18 @@ public class Default_MapPageScript : UIPageScript {
             string dat = pd.GetAsJson();
             Debug.Log("ProvideData to be sent: " + dat);
 
-            reference.Child("MamaveSu").Child(id.ToString()).SetValueAsync(dat);
-            id++;
-
-            
-
-
+            // It keeps the amount of water and the amount of food with the user id.
+           string key = reference.Child("MamaveSu").Push().Key;
+           await reference.Child("MamaveSu").Child(key).Child(uniqueid).SetRawJsonValueAsync(dat);
+         
             return;
         }
 
-
-
     }
 
-    private void Script_ValueChanged(object sender, ValueChangedEventArgs e){
-       Debug.Log("Retrieving from database " + e.Snapshot.Child(id.ToString()).GetValue(true).ToString());
-    }
+
+  /* private void Script_ValueChanged(object sender, ValueChangedEventArgs e){
+       Debug.Log("Retrieving from database " + e.Snapshot.Child("eKHUps71JTTzzgqNfMsvEoD12wY2").GetValue(true).ToString());
+    }*/
 
 }
