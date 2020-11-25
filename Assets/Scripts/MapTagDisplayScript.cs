@@ -14,7 +14,7 @@ public class MapTagDisplayScript : MonoBehaviour
     }
 
     private void Update() {
-        //this.transform.LookAt(Camera.main.transform.position);
+        this.transform.LookAt(Camera.main.transform.position);
     }
 
     public bool ReadAndDisplayNeed(string input) {

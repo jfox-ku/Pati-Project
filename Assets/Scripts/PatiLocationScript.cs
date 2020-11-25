@@ -16,8 +16,9 @@ public class PatiLocationScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ListOfLocations = new string[] {"41.193139,29.049372","41.194786,29.052225"};
-        
+        ListOfLocations = new string[] {"41.193139,29.049372","41.194786,29.052225","52.357702,4.864808", "52.355959,4.863162" };
+
+
         MapSpwn.SetLocations(ListOfLocations);
         MapSpwn.PlaceMapTags();
     }
