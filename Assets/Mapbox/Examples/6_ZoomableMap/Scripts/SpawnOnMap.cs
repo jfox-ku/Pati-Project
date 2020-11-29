@@ -38,7 +38,11 @@
 				var locationString = _locationStrings[i];
 				_locations[i] = Conversions.StringToLatLon(locationString);
 				var instance = Instantiate(_markerPrefab);
-				instance.transform.localPosition = _map.GeoToWorldPosition(_locations[i], true);
+                var MapTag = instance.GetComponent<MapTagDisplayScript>();
+                MapTag.lat = float.Parse( _locations[i].x+"");
+                MapTag.lon = float.Parse(_locations[i].y + "");
+
+                instance.transform.localPosition = _map.GeoToWorldPosition(_locations[i], true);
 				instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
 				_spawnedObjects.Add(instance);
 			}
@@ -55,5 +59,20 @@
 				spawnedObject.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
 			}
 		}
-	}
+
+        public void UpdateAndPlaceTags(string[] inp) {
+            ResetTags();
+            SetLocations(inp);
+            PlaceMapTags();
+
+        }
+
+        private void ResetTags() {
+            foreach(GameObject place in _spawnedObjects) {
+                Destroy(place);
+            }
+            _spawnedObjects.Clear();
+        }
+
+    }
 }

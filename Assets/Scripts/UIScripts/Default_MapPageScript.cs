@@ -13,6 +13,8 @@ using Firebase.Unity.Editor;
 public class Default_MapPageScript : UIPageScript {
     //Could have used an array of buttons here for scalability
     //but this is better for clarity 
+    
+
     public Button Mama_Button;
     public Button Need_Button;
     public Button Plus_Button;
@@ -69,6 +71,12 @@ public class Default_MapPageScript : UIPageScript {
         ProvideNeedSubMenu.SetActive(true);
     }
 
+    public void ProvideNeedOnTag(GameObject Tag) {
+        ProvideNeedSubMenu.SetActive(true);
+    }
+
+
+    //Doesn't work Currently
     public void QuitButtonOnSubmenu(GameObject submenu) {
         submenu.SetActive(false);
     }
@@ -93,14 +101,15 @@ public class Default_MapPageScript : UIPageScript {
 
         string key = reference.Child("Ihtiyaçlar").Push().Key;
         await reference.Child("Ihtiyaçlar").Child(key).Child(uniqueid).SetRawJsonValueAsync(dat);
-         
-         FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(key).Child(uniqueid).GetValueAsync().ContinueWith(task => {
-        
-           DataSnapshot snapshot = task.Result;
-            Debug.Log("Retrieving from database " + snapshot);
-          
-    
-      });
+
+            await FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(key).Child(uniqueid).GetValueAsync().ContinueWith(task => {
+
+
+                DataSnapshot snapshot = task.Result;
+                Debug.Log("Retrieving from database " + snapshot.GetRawJsonValue());
+
+
+            });
         
 
         // Query query = reference.OrderByKey();

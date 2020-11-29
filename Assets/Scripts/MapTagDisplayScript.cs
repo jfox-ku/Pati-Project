@@ -5,9 +5,15 @@ using UnityEngine.UI;
 
 public class MapTagDisplayScript : MonoBehaviour
 {
+
+    public Default_MapPageScript MapPageScript; //Reference to UI script so OnMouseDown can call function on it.
+
     public Image Pointer;
     //These are set in the editor as Cat-1 and Cat-2... and added to this list.
     public List<GameObject> CatVisuals;
+    public float lat;
+    public float lon;
+
     
     public MapTagDisplayScript(string input) {
         ReadAndDisplayNeed(input);
@@ -38,6 +44,10 @@ public class MapTagDisplayScript : MonoBehaviour
 
         CatVisuals[Count-1].SetActive(true);
 
+    }
+
+    public void OnMouseDown() {
+        MapPageScript.ProvideNeedOnTag(this.gameObject);
     }
 
 }
