@@ -28,8 +28,26 @@ public class Default_MapPageScript : UIPageScript {
     public GameObject AddNeedSubMenu;
     public GameObject ProvideNeedSubMenu;
     public GameObject LeftSubMenu;
+    public List<GameObject> announcementsList;
+    public GameObject announcementPrefab;
+    public Transform startTransform;
 
     private bool isExpandedNeedMenu = false;
+
+    public void Start()
+    {
+        announcementsList = new List<GameObject>();
+    }
+    public void AddAnnouncement()
+    {
+        var obj = Instantiate(announcementPrefab);
+        obj.transform.SetParent(LeftSubMenu.transform);
+        obj.transform.localScale = new Vector3(1f,1f,1f);
+        announcementsList.Add(obj);
+        AnnouncementDisplayScript objectScript = obj.GetComponent<AnnouncementDisplayScript>();
+        objectScript.UpdateInformation("Acil ilaç ihtiyacı.", "Ataşehir'de. İletişim: 39450349");
+        obj.transform.position = new Vector3(startTransform.position.x, startTransform.position.y + (announcementsList.Count * -50f), startTransform.position.z);
+    }
 
     public override void ReadInputFields() {
         Debug.LogError("Nothing to read in Default Map Page");
