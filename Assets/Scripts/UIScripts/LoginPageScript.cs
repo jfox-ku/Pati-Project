@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using Firebase.Auth;
 
 public class LoginPageScript : UIPageScript {
     //Private to public static to access email and password in user script.
@@ -16,8 +17,8 @@ public class LoginPageScript : UIPageScript {
         }
         email = inputFields[0].text;
         password = inputFields[1].text;
-        Connect();
-
+         Connect();
+     
     }
     
 
@@ -30,6 +31,7 @@ public class LoginPageScript : UIPageScript {
             email = "kedicik@miyav.com";
             password = "banamama";
         }
+
         auth.setUserData(email, password);
         auth.LoginButton();
 

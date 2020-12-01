@@ -11,12 +11,15 @@ public class Authentication : MonoBehaviour {
     private string email;
     private string password;
     public static string uid;
-
     //Firebase variables
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
     public FirebaseAuth auth;
     public FirebaseUser User;
+
+    
+    public bool isVerifyEmailSend = false;
+    
     
     
     public void setUserData(string e,string p) {
@@ -54,6 +57,30 @@ public class Authentication : MonoBehaviour {
     }
 
 
+   public void RegisterButton() {
+        Debug.Log("RegisterPress");
+        //Call the login coroutine passing the email and password
+        StartCoroutine(Register(email, password));
+    
+    }
+
+
+   private IEnumerator Register(string _email, string _password) {
+        var RegisterTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
+        //Wait until the Register task completes
+        
+        yield return new WaitUntil(predicate: () => RegisterTask.IsCompleted);
+       
+       Firebase.Auth.FirebaseUser newUser = RegisterTask.Result;
+       SendEmailForVerification();
+       if(isVerifyEmailSend == true)
+       Debug.LogFormat("Firebase user created successfully: {0} ({1})",
+       newUser.DisplayName, newUser.UserId);
+       PageManagerScript.instance.swapToPage(1); 
+ }
+
+
+
     private IEnumerator Login(string _email, string _password) {
         //Call the Firebase auth signin function passing the email and password
         var LoginTask = auth.SignInWithEmailAndPasswordAsync(_email, _password);
@@ -75,6 +102,32 @@ public class Authentication : MonoBehaviour {
             Debug.Log("user id " + uid);
         }
         PageManagerScript.instance.swapToPage(2); //Page 2 is Default_Map_page
+
+    }
+
+//Sends an email for verification
+      public void SendEmailForVerification()
+    {
+        if (auth.CurrentUser != null)
+        {
+            auth.CurrentUser.SendEmailVerificationAsync().ContinueWith(task =>
+            {
+                if (task.IsCanceled)
+                {
+                    Debug.LogError("Task was canceled.");
+                    return;
+                }
+                if (task.IsFaulted)
+                {
+                    Debug.LogError("Task encountered an error: " + task.Exception);
+                    return;
+                }
+                auth.SignOut();
+                isVerifyEmailSend = true;
+                Debug.Log("Email send successfully.");
+            });
+
+        }
 
     }
 

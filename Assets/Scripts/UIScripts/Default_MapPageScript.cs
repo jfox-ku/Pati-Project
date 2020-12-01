@@ -20,7 +20,8 @@ public class Default_MapPageScript : UIPageScript {
     public Button Plus_Button;
     
     string uniqueid;
-    
+    string key;
+   
 
 
     //Submenu objects that pop-up to ask for specific inputs
@@ -76,8 +77,6 @@ public class Default_MapPageScript : UIPageScript {
             isExpandedNeedMenu = true;
         }
 
-
-
     }
 
     public void AddNeed() {
@@ -98,10 +97,7 @@ public class Default_MapPageScript : UIPageScript {
     public void QuitButtonOnSubmenu(GameObject submenu) {
         submenu.SetActive(false);
     }
-
-      
-       
-     
+  
     //Please don't mind the ugly structure of this function
     //We will improve the whole data system during the next work package (beyond week 5)
     //this is solely for testing
@@ -109,31 +105,51 @@ public class Default_MapPageScript : UIPageScript {
 
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
         uniqueid = Authentication.uid;
-
+        key = reference.Child("Ihtiyaçlar").Push().Key;
         NeedSubMenuScript sm = submenu.GetComponent<NeedSubMenuScript>();
+        
         
         if (sm) { //sm is null if submenu doesn't contain the script (NeedSubMenuScript)
              NeedData nd = sm.ReadData();
              string dat = nd.GetAsJson();
             Debug.Log("NeedData to be sent: " + dat);
 
-        string key = reference.Child("Ihtiyaçlar").Push().Key;
-        await reference.Child("Ihtiyaçlar").Child(key).Child(uniqueid).SetRawJsonValueAsync(dat);
-
-            await FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(key).Child(uniqueid).GetValueAsync().ContinueWith(task => {
-
-
-                DataSnapshot snapshot = task.Result;
-                Debug.Log("Retrieving from database " + snapshot.GetRawJsonValue());
-
-
-            });
+        await reference.Child("Ihtiyaçlar").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
         
+         /*FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").OrderByChild("AnimalType").EqualTo("Diğer").GetValueAsync().ContinueWith(task => {
+          if (task.IsFaulted){
+                Debug.Log("Data not found"); }
+                else if (task.IsCompleted){
+           DataSnapshot snapshot = task.Result;
+           Debug.Log("Retrieving " + snapshot.GetRawJsonValue());}
+    
+      });*/
+         
 
-        // Query query = reference.OrderByKey();
+         FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(key).Child(uniqueid).Child("AnimalType").GetValueAsync().ContinueWith(task => {
+           DataSnapshot snapshot = task.Result;
+           Debug.Log("Retrieving data from database " + snapshot.GetRawJsonValue());
+    
+      });
 
-        // FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").ValueChanged += Script_ValueChanged;
-            
+         //it removes datas with given user ids.
+        /* FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(uniqueid).RemoveValueAsync().ContinueWith(task => {
+           Debug.Log("Delete");
+    
+      });*/
+
+
+      FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").OrderByChild("AnimalType").GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted){
+                Debug.Log("Data not found"); }
+                else if (task.IsCompleted){
+                DataSnapshot snapshot = task.Result;
+              
+                Debug.Log("query" + snapshot.GetRawJsonValue());
+            }
+        });
+        
+         //Query query = reference.OrderByChild("AnimalType").EqualTo("Diğer");
             return;
         }
 
@@ -145,16 +161,14 @@ public class Default_MapPageScript : UIPageScript {
 
             // It keeps the amount of water and the amount of food with the user id.
            string key = reference.Child("MamaveSu").Push().Key;
-           await reference.Child("MamaveSu").Child(key).Child(uniqueid).SetRawJsonValueAsync(dat);
+           await reference.Child("MamaveSu").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
          
             return;
         }
 
     }
-
-
-  /* private void Script_ValueChanged(object sender, ValueChangedEventArgs e){
-       Debug.Log("Retrieving from database " + e.Snapshot.Child("eKHUps71JTTzzgqNfMsvEoD12wY2").GetValue(true).ToString());
-    }*/
+      
+       
 
 }
+

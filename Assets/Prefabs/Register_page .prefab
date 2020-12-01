@@ -920,8 +920,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputFields:
-  - {fileID: 0}
-  auth: {fileID: 0}
+  - {fileID: 943250512318945247}
+  - {fileID: 1995516089576700746}
+  - {fileID: 23920440439467077}
 --- !u!1 &23920441919191701
 GameObject:
   m_ObjectHideFlags: 0
