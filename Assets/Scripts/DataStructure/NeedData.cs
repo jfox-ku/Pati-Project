@@ -11,17 +11,13 @@ public class NeedData : DataRoot {
     public string AnimalType;
     public string AnimalCount;
     public string AnimalMaturity;
-    public string CreationDate = DateTime.Now.ToShortDateString(); //current date
-   
-    //Lat and Lon of the user at the time the user creates the data. These should not change at all after their initialization.
-    public float Lat;
-    public float Lon;
-
-
-    public NeedData(string AType, string ACount) : base(NEED_TYPE) {
+    
+  
+    public NeedData(string AType, string ACount, string AMaturity) : base(NEED_TYPE) {
         //CreatorUser = Authentication.uid;
         AnimalType = AType;
         AnimalCount = ACount;
+        AnimalMaturity = AMaturity;
 
     }
 

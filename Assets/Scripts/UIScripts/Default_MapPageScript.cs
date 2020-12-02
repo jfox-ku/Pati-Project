@@ -29,6 +29,8 @@ public class Default_MapPageScript : UIPageScript {
     public GameObject AddNeedSubMenu;
     public GameObject ProvideNeedSubMenu;
     public GameObject LeftSubMenu;
+
+    //Announcments stuff (Duyurular)
     public List<GameObject> announcementsList;
     public GameObject announcementPrefab;
     public Transform startTransform;
@@ -39,6 +41,7 @@ public class Default_MapPageScript : UIPageScript {
     {
         announcementsList = new List<GameObject>();
     }
+
     public void AddAnnouncement()
     {
         var obj = Instantiate(announcementPrefab);
@@ -115,39 +118,39 @@ public class Default_MapPageScript : UIPageScript {
             Debug.Log("NeedData to be sent: " + dat);
 
         await reference.Child("Ihtiyaçlar").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
-        
-         /*FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").OrderByChild("AnimalType").EqualTo("Diğer").GetValueAsync().ContinueWith(task => {
-          if (task.IsFaulted){
-                Debug.Log("Data not found"); }
-                else if (task.IsCompleted){
-           DataSnapshot snapshot = task.Result;
-           Debug.Log("Retrieving " + snapshot.GetRawJsonValue());}
-    
-      });*/
-         
 
-         FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(key).Child(uniqueid).Child("AnimalType").GetValueAsync().ContinueWith(task => {
-           DataSnapshot snapshot = task.Result;
-           Debug.Log("Retrieving data from database " + snapshot.GetRawJsonValue());
-    
-      });
+            /*FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").OrderByChild("AnimalType").EqualTo("Diğer").GetValueAsync().ContinueWith(task => {
+             if (task.IsFaulted){
+                   Debug.Log("Data not found"); }
+                   else if (task.IsCompleted){
+              DataSnapshot snapshot = task.Result;
+              Debug.Log("Retrieving " + snapshot.GetRawJsonValue());}
 
-         //it removes datas with given user ids.
-        /* FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(uniqueid).RemoveValueAsync().ContinueWith(task => {
-           Debug.Log("Delete");
-    
-      });*/
+         });*/
 
 
-      FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").OrderByChild("AnimalType").GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted){
-                Debug.Log("Data not found"); }
-                else if (task.IsCompleted){
+            await FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(key).Child(uniqueid).Child("AnimalType").GetValueAsync().ContinueWith(task => {
                 DataSnapshot snapshot = task.Result;
-              
-                Debug.Log("query" + snapshot.GetRawJsonValue());
-            }
-        });
+                Debug.Log("Retrieving data from database " + snapshot.GetRawJsonValue());
+
+            });
+
+            //it removes datas with given user ids.
+            /* FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(uniqueid).RemoveValueAsync().ContinueWith(task => {
+               Debug.Log("Delete");
+
+          });*/
+
+
+            await FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").OrderByChild("AnimalType").GetValueAsync().ContinueWith(task => {
+                if (task.IsFaulted) {
+                    Debug.Log("Data not found");
+                } else if (task.IsCompleted) {
+                    DataSnapshot snapshot = task.Result;
+
+                    Debug.Log("query" + snapshot.GetRawJsonValue());
+                }
+            });
         
          //Query query = reference.OrderByChild("AnimalType").EqualTo("Diğer");
             return;

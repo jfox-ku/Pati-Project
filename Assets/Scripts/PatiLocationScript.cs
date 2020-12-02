@@ -11,18 +11,25 @@ using System;
 public class PatiLocationScript : MonoBehaviour
 {
     public SpawnOnMap MapSpwn; //This holds reference to script on map object
+    private static PatiLocationScript _instance;
+
 
     public string[] ListOfLocations;
 
     //Testing
     public string[] ListOfLocationsTest;
+    public Vector2 UserLoc;
 
     // Start is called before the first frame update
     void Start()
     {
+        _instance = this;
+
         //* Get user location here
+        UserLoc = new Vector2(41.046639f, 28.984556f);
 
         //* Get user location cluster here. (Clusters are wider areas)
+        string UserCluster = FindCluster(UserLoc.x, UserLoc.y);
 
         //* Get all NeedData within a cluster from the server, put them into the format seen below. Make use of the ExtractLatLon and PutLatLon functions defined below.
         ListOfLocations = new string[] {"41.193139,29.049372","41.194786,29.052225","52.357702,4.864808", "52.355959,4.863162"};
@@ -58,14 +65,14 @@ public class PatiLocationScript : MonoBehaviour
         
     }
 
-    public string FindCluster(float lat,float lon) {
+    public static string FindCluster(float lat,float lon) {
         int x = (int) Math.Round(lat / 5f);
         int y = (int) Math.Round(lat / 5f);
         return x + "," + y;
 
     }
 
-    public bool CheckClusterValid(float lat, float lon, string clust) {
+    public static bool CheckClusterValid(float lat, float lon, string clust) {
         if (FindCluster(lat, lon).CompareTo(clust) == 0) {
             return true;
         } else {
@@ -84,9 +91,22 @@ public class PatiLocationScript : MonoBehaviour
 
     }
 
+    public static Vector2 ExtractCluster(string s) {
+        float x = float.Parse(s.Substring(0, s.IndexOf(',')));
+        float y = float.Parse(s.Substring(s.IndexOf(',') + 1));
+
+
+        return new Vector2(x, y);
+
+    }
+
     public static string PutLatLon(float lat,float lon){
         return lat + "," + lon;
 
+    }
+
+    public static PatiLocationScript GetInstance() {   
+        return _instance;
     }
 
 
