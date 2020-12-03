@@ -27,11 +27,12 @@ void Start()
     }
     private IEnumerator StartLocationService()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
         if (!Input.location.isEnabledByUser)
         {
-            Debug.Log("User has not enabled location");
-            yield break;
+            Debug.Log("User has not enabled location. Using placeholder location instead.");
+            //PatiLocationScript.GetInstance().UserLocationStart(41.046139, 28.985556);
+           
         }
         Input.location.Start();
         while (Input.location.status == LocationServiceStatus.Initializing)
@@ -43,8 +44,17 @@ void Start()
             Debug.Log("Unable to determine device location");
             yield break;
         }
-        Debug.Log("Latitude : " + Input.location.lastData.latitude);
-        Debug.Log("Longitude : " + Input.location.lastData.longitude);
+        double lat = Input.location.lastData.latitude;
+        double lon = Input.location.lastData.longitude;
+        Debug.Log("Latitude : " + lat);
+        Debug.Log("Longitude : " + lon);
+
+        if(lat==0 || lon == 0) {
+            lat = 41.046139;
+            lon = 28.985556;
+        }
+
+        PatiLocationScript.GetInstance().UserLocationStart(lat,lon);
        // Debug.Log("Altitude : " + Input.location.lastData.altitude);
     }
 

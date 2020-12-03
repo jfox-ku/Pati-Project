@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class RegisterPageScript : UIPageScript
 {
-    public static string email;
-    public static string password;
-    public static string passwordCheck;
+    public string email;
+    public string password;
+    public string passwordCheck;
     public Authentication auth;
 
     public override void ReadInputFields() {
@@ -24,10 +24,11 @@ public class RegisterPageScript : UIPageScript
         //Send register data to server here.
         //You can call a function on the auth class.
         //(Check the connect function in LoginPageScript)
-        if(email == "" || password == "") {
-            email = "koc.ezgi96@gmail.com";
-            password = "123456";
-        }
+        //if(email == "" || password == "") {
+        //    email = "koc.ezgi96@gmail.com";
+        //    password = "123456";
+        //}
+        Debug.Log("User Email: " + email + "\nUser pass: " + password);
        auth.setUserData(email, password);
        auth.RegisterButton();
     }
