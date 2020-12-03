@@ -18,8 +18,8 @@ public class DataRoot
     public string CreationDate;
     
     //Lat and Lon of the user at the time the user creates the data. These should not change at all after their initialization.
-    public float Lat;
-    public float Lon;
+    public double Lat;
+    public double Lon;
     public float ClusterX;
     public float ClusterY;
 
@@ -31,12 +31,15 @@ public class DataRoot
         CreationDate = DateTime.Now.ToShortDateString(); //current date
         Lat = PatiLocationScript.GetInstance().UserLoc.x;
         Lon = PatiLocationScript.GetInstance().UserLoc.y;
+        //**
+
         string cluster = PatiLocationScript.FindCluster(Lat, Lon);
         Vector2 clst = PatiLocationScript.ExtractCluster(cluster);
         ClusterX = clst.x;
         ClusterY = clst.y;
-     
-  
+    
+        //**
+
     }
 
 

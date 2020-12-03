@@ -50,6 +50,8 @@
 
 		private void Update()
 		{
+            if (_spawnedObjects == null) return;
+
 			int count = _spawnedObjects.Count;
 			for (int i = 0; i < count; i++)
 			{

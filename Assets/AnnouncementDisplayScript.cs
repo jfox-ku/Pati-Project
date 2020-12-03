@@ -29,4 +29,9 @@ public class AnnouncementDisplayScript : MonoBehaviour
         detailsText.text = details;
         displayText.text = display;
     }
+
+
+    public AnnoData ReadAsAnnoData() {
+        return new AnnoData(displayText.text, detailsText.text);
+    }
 }

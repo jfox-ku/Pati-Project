@@ -24,6 +24,7 @@ public class RegisterPageScript : UIPageScript
         //Send register data to server here.
         //You can call a function on the auth class.
         //(Check the connect function in LoginPageScript)
+        Debug.Log("User Email: " + email + "\nUser pass: " + password);
        auth.setUserData(email, password);
        auth.RegisterButton();
     }
