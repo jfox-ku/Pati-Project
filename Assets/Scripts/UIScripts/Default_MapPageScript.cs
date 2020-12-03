@@ -120,8 +120,7 @@ public class Default_MapPageScript : UIPageScript {
     public void QuitButtonOnSubmenu(GameObject submenu) {
         submenu.SetActive(false);
     }
-  
-   
+ 
       
        
 

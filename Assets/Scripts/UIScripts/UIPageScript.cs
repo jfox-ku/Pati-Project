@@ -7,10 +7,11 @@ public abstract class UIPageScript : MonoBehaviour
 {
     [SerializeField] //This line shows the array of input fields on the UnityEditor
     protected TMP_InputField[] inputFields;
+   
     
 
     public abstract void ReadInputFields();
-
+    
 
 
 

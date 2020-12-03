@@ -32,12 +32,14 @@ public class DataRoot
         Lat = PatiLocationScript.GetInstance().UserLoc.x;
         Lon = PatiLocationScript.GetInstance().UserLoc.y;
         //**
+
         string cluster = PatiLocationScript.FindCluster(Lat, Lon);
         Vector2 clst = PatiLocationScript.ExtractCluster(cluster);
         ClusterX = clst.x;
         ClusterY = clst.y;
-        
+    
         //**
+
     }
 
 

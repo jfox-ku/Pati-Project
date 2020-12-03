@@ -76,7 +76,8 @@ public class Authentication : MonoBehaviour {
        if(isVerifyEmailSend == true)
        Debug.LogFormat("Firebase user created successfully: {0} ({1})",
        newUser.DisplayName, newUser.UserId);
-       PageManagerScript.instance.swapToPage(1); 
+       PageManagerScript.instance.swapToPage(1);
+       
  }
 
 

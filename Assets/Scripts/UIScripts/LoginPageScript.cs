@@ -27,7 +27,7 @@ public class LoginPageScript : UIPageScript {
         Debug.Log("\n**email: " + email + "\n**Password: " + password);
         //Establish connection to database here
         //Below is the user to default to, purely to avoid typing it out every time. The user will instead have the option to autofill their last succesfull login.
-        if(email == "" || password == "") {
+       if(email == "" || password == "") {
             email = "kedicik@miyav.com";
             password = "banamama";
         }
