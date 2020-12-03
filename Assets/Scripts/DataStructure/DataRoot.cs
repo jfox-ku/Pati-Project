@@ -31,8 +31,12 @@ public class DataRoot
         CreationDate = DateTime.Now.ToShortDateString(); //current date
         Lat = PatiLocationScript.GetInstance().UserLoc.x;
         Lon = PatiLocationScript.GetInstance().UserLoc.y;
-
-        PatiLocationScript.FindCluster(Lat, Lon);
+        string cluster = PatiLocationScript.FindCluster(Lat, Lon);
+        Vector2 clst = PatiLocationScript.ExtractCluster(cluster);
+        ClusterX = clst.x;
+        ClusterY = clst.y;
+     
+  
     }
 
 

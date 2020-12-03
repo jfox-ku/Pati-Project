@@ -110,6 +110,7 @@ public class Default_MapPageScript : UIPageScript {
         uniqueid = Authentication.uid;
         key = reference.Child("Ihtiyaçlar").Push().Key;
         NeedSubMenuScript sm = submenu.GetComponent<NeedSubMenuScript>();
+
         
         
         if (sm) { //sm is null if submenu doesn't contain the script (NeedSubMenuScript)
@@ -117,40 +118,30 @@ public class Default_MapPageScript : UIPageScript {
              string dat = nd.GetAsJson();
             Debug.Log("NeedData to be sent: " + dat);
 
-        await reference.Child("Ihtiyaçlar").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
-
-            /*FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").OrderByChild("AnimalType").EqualTo("Diğer").GetValueAsync().ContinueWith(task => {
-             if (task.IsFaulted){
-                   Debug.Log("Data not found"); }
-                   else if (task.IsCompleted){
-              DataSnapshot snapshot = task.Result;
-              Debug.Log("Retrieving " + snapshot.GetRawJsonValue());}
-
-         });*/
+       //This part has been updated. Now all the actions of the users are arranged within themselves thanks to their identity and we can access all the actions of the specific user we want with their identities.
+       await reference.Child("Ihtiyaçlar").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
 
 
-            await FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(key).Child(uniqueid).Child("AnimalType").GetValueAsync().ContinueWith(task => {
-                DataSnapshot snapshot = task.Result;
-                Debug.Log("Retrieving data from database " + snapshot.GetRawJsonValue());
-
-            });
-
-            //it removes datas with given user ids.
+            //it removes datas with given user ids. If we want to remove data, we will use it.
             /* FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(uniqueid).RemoveValueAsync().ContinueWith(task => {
                Debug.Log("Delete");
 
           });*/
+           
+         
+         //Trying to access all users where clusterX is equal to 8 but it access all users without looking clusterX. We will update this.
+          await FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(uniqueid).Child(key).Child("ClusterX").GetValueAsync().ContinueWith(task => {
+                DataSnapshot snapshot = task.Result;
+                Debug.Log("Retrieving data from database " + snapshot.GetRawJsonValue());
+               FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").GetValueAsync().ContinueWith(task2 => {
+               if(int.Parse(snapshot.GetRawJsonValue()) == 8){
+                  DataSnapshot snapshot2 = task2.Result;
+                  Debug.Log("Retrieving data from database " + snapshot2.GetRawJsonValue());
+               }
 
-
-            await FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").OrderByChild("AnimalType").GetValueAsync().ContinueWith(task => {
-                if (task.IsFaulted) {
-                    Debug.Log("Data not found");
-                } else if (task.IsCompleted) {
-                    DataSnapshot snapshot = task.Result;
-
-                    Debug.Log("query" + snapshot.GetRawJsonValue());
-                }
+                 });
             });
+
         
          //Query query = reference.OrderByChild("AnimalType").EqualTo("Diğer");
             return;
@@ -170,6 +161,7 @@ public class Default_MapPageScript : UIPageScript {
         }
 
     }
+
       
        
 
