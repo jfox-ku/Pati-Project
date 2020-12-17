@@ -46,6 +46,7 @@ namespace Mapbox.Unity.Utilities
 			var latLonSplit = s.Split(',');
 			if (latLonSplit.Length != 2)
 			{
+				Debug.Log("Length" +latLonSplit.Length);
 				throw new ArgumentException("Wrong number of arguments");
 			}
 

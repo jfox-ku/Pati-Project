@@ -12,6 +12,7 @@ using System;
 public class PatiLocationScript : MonoBehaviour
 {
     public SpawnOnMap MapSpwn; //This holds reference to script on map object
+    public SpawnUserScript reference;
 
     private static PatiLocationScript _instance;
 
@@ -22,6 +23,7 @@ public class PatiLocationScript : MonoBehaviour
 
     //Testing
     public Vector2d UserLoc;
+        
 
     // Start is called before the first frame update
     void Start()
@@ -72,7 +74,8 @@ public class PatiLocationScript : MonoBehaviour
     public void UpdateUserLocation(double Lat, double Lon) {
         Debug.Log("User Location updated to: " + Lat + ", " + Lon);
         UserLoc = new Vector2d(Lat, Lon);
-
+        reference.SetUserLocation(PutLatLon(Lat, Lon));
+        reference.PlaceUserTag();
     }
 
 
