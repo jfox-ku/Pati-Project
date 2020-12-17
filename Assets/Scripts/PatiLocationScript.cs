@@ -18,10 +18,9 @@ public class PatiLocationScript : MonoBehaviour
     [SerializeField]
     AbstractMap _map;
 
-    public string[] ListOfLocations;
+    public List<string> ListOfLocations;
 
     //Testing
-    public string[] ListOfLocationsTest;
     public Vector2d UserLoc;
 
     // Start is called before the first frame update
@@ -38,9 +37,18 @@ public class PatiLocationScript : MonoBehaviour
         //* Get user location cluster here. (Clusters are wider areas)
         string UserCluster = FindCluster(Lat, Lon);
 
+        string[] TestLocations = { "41.193139,29.049372", "41.194786,29.052225", "52.357702,4.864808", "52.355959,4.863162" };
+        ListOfLocations = new List<string>();
+
+        //************** EZGI: Get all the location values from a certain cluster. Put them in a variable.
+
+        //**************
+        ListOfLocations.AddRange(TestLocations);
+
+
         //* Get all NeedData within a cluster from the server, put them into the format seen below. Make use of the ExtractLatLon and PutLatLon functions defined below.
-        ListOfLocations = new string[] { "41.193139,29.049372", "41.194786,29.052225", "52.357702,4.864808", "52.355959,4.863162" };
-        ListOfLocationsTest = new string[] { "41.193139,29.049372", "41.194786,29.052225", "52.357702,4.864808", "52.355959,4.863162", "41.046139,28.985556" };
+        //ListOfLocations = new string[] { "41.193139,29.049372", "41.194786,29.052225", "52.357702,4.864808", "52.355959,4.863162" };
+        //ListOfLocationsTest = new string[] { "41.193139,29.049372", "41.194786,29.052225", "52.357702,4.864808", "52.355959,4.863162", "41.046139,28.985556" };
 
         //This bit is for testing the helper functions. Can be removed.
         foreach (string cord in ListOfLocations) {
@@ -56,10 +64,15 @@ public class PatiLocationScript : MonoBehaviour
 
     }
 
-    //There is already a listener available with mapbox, so this function will subscribe to onLocationUpdated from LocationProvider
-    //For now it is on a button
+    
     public void UpdateLocation() {
-        MapSpwn.UpdateAndPlaceTags(ListOfLocationsTest); //This shouldn't be test. Just to see if it updates.
+        //MapSpwn.UpdateAndPlaceTags(ListOfLocationsTest); //This shouldn't be test. Just to see if it updates.
+    }
+
+    public void UpdateUserLocation(double Lat, double Lon) {
+        Debug.Log("User Location updated to: " + Lat + ", " + Lon);
+        UserLoc = new Vector2d(Lat, Lon);
+
     }
 
 

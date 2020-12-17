@@ -14,7 +14,7 @@
 
 		[SerializeField]
 		[Geocode]
-		string[] _locationStrings;
+		List<string> _locationStrings;
 		Vector2d[] _locations;
 
 		[SerializeField]
@@ -25,15 +25,20 @@
 
 		List<GameObject> _spawnedObjects;
 
-        public void SetLocations(string[] inp) {
+        public void SetLocations(List<string> inp) {
             _locationStrings = inp;
         }
 
-		public void PlaceMapTags()
+        //Can add to this function to give more functioanlity or customization to MapTags
+        public void AddTagToLoc(string toAdd) {
+            _locationStrings.Add(toAdd);
+        }
+
+        public void PlaceMapTags()
 		{
-			_locations = new Vector2d[_locationStrings.Length];
+			_locations = new Vector2d[_locationStrings.Count];
 			_spawnedObjects = new List<GameObject>();
-			for (int i = 0; i < _locationStrings.Length; i++)
+			for (int i = 0; i < _locationStrings.Count; i++)
 			{
 				var locationString = _locationStrings[i];
 				_locations[i] = Conversions.StringToLatLon(locationString);
@@ -62,12 +67,15 @@
 			}
 		}
 
-        public void UpdateAndPlaceTags(string[] inp) {
+        public void UpdateAndPlaceTags(List<string> inp) {
             ResetTags();
             SetLocations(inp);
             PlaceMapTags();
 
         }
+
+
+        
 
         private void ResetTags() {
             foreach(GameObject place in _spawnedObjects) {

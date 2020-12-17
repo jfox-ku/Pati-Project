@@ -85,24 +85,24 @@ public class Authentication : MonoBehaviour {
     private IEnumerator Login(string _email, string _password) {
         //Call the Firebase auth signin function passing the email and password
         var LoginTask = auth.SignInWithEmailAndPasswordAsync(_email, _password);
-        //Wait until the task completes
-        Debug.Log("1");
         yield return new WaitUntil(predicate: () => LoginTask.IsCompleted);
-        Debug.Log("2");
 
         //User is now logged in
         //Now get the result
         User = LoginTask.Result;
         Debug.LogFormat("User signed in successfully: {0} ({1})", User.DisplayName, User.Email);
-        Debug.Log("4");
+       
 
         Firebase.Auth.FirebaseUser user = auth.CurrentUser;
         if (user != null) {
             uid = user.UserId;
             //It prints user id.
             Debug.Log("user id " + uid);
+            //Below line finds the UserLocationGPS script and starts the location query process.
+            FindObjectOfType<UserLocationGPS>().StartLocation();
+            PageManagerScript.instance.swapToPage(2); //Page 2 is Default_Map_page
         }
-        PageManagerScript.instance.swapToPage(2); //Page 2 is Default_Map_page
+        
 
     }
 

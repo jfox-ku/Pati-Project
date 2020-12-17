@@ -50,4 +50,13 @@ public class MapTagDisplayScript : MonoBehaviour
         MapPageScript.ProvideNeedOnTag(this.gameObject);
     }
 
+
+    private void OnBecameInvisible() {
+        this.gameObject.SetActive(false);
+    }
+
+    private void OnBecameVisible() {
+        this.gameObject.SetActive(true);
+    }
+
 }

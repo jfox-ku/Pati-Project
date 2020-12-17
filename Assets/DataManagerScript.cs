@@ -63,6 +63,10 @@ public class DataManagerScript : MonoBehaviour
             Debug.Log("NeedData to be sent: " + dat);
 
             await reference.Child("Ihtiyaçlar").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
+            
+            
+
+
             return;
         }
     }
