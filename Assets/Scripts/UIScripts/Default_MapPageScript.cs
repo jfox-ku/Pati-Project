@@ -29,6 +29,7 @@ public class Default_MapPageScript : UIPageScript {
     public GameObject AddNeedSubMenu;
     public GameObject ProvideNeedSubMenu;
     public GameObject LeftSubMenu;
+    public GameObject UserSubMenu;
 
     //Announcments stuff (Duyurular)
     public List<GameObject> announcementsList;
@@ -80,6 +81,15 @@ public class Default_MapPageScript : UIPageScript {
             LeftSubMenu.SetActive(false);
         } else {
             LeftSubMenu.SetActive(true);
+        }
+
+    }
+
+    public void ToggleUserMenu() {
+        if (UserSubMenu.activeInHierarchy) {
+            UserSubMenu.SetActive(false);
+        } else {
+            UserSubMenu.SetActive(true);
         }
 
     }

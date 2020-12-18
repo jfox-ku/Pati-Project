@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserDisplayScript : MonoBehaviour
+public class RewardManagerScript : MonoBehaviour
 {
-    public double lat;
-    public double lon;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +13,6 @@ public class UserDisplayScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.LookAt(Camera.main.transform.position);
+        
     }
 }

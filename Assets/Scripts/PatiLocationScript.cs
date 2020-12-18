@@ -63,6 +63,7 @@ public class PatiLocationScript : MonoBehaviour
 
         MapSpwn.SetLocations(ListOfLocations);
         MapSpwn.PlaceMapTags();
+        reference.PlaceUserTag();
 
     }
 
@@ -74,8 +75,8 @@ public class PatiLocationScript : MonoBehaviour
     public void UpdateUserLocation(double Lat, double Lon) {
         Debug.Log("User Location updated to: " + Lat + ", " + Lon);
         UserLoc = new Vector2d(Lat, Lon);
-        reference.SetUserLocation(PutLatLon(Lat, Lon));
-        reference.PlaceUserTag();
+        reference.SetUserLocation(SafePutLatLon(Lat, Lon));
+        
     }
 
 
@@ -120,8 +121,25 @@ public class PatiLocationScript : MonoBehaviour
 
     }
 
-    public static string PutLatLon(double lat,double lon){
-        return lat + "," + lon;
+    public static string PutLatLon(double lat, double lon) {
+
+        string ret = lat + "," + lon;
+        Debug.Log("PutLatLon made: " + ret);
+        return ret;
+
+    }
+
+
+    public static string SafePutLatLon(double lat,double lon){
+        string slat = lat + "";
+        slat = slat.Replace(",", ".");
+
+        string slon = lon + "";
+        slon = slon.Replace(",", ".");
+
+        string ret = slat + "," + slon;
+        Debug.Log("PutLatLon made: "+ret);
+        return ret;
 
     }
 

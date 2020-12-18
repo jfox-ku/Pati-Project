@@ -37,7 +37,7 @@ public class SpawnUserScript : MonoBehaviour
     {
         userLoc = Conversions.StringToLatLon(location);
         var instance = Instantiate(_markerPrefab);
-        var UserTag = instance.GetComponent<UserDisplayScript>();
+        var UserTag = instance.GetComponentInChildren<UserDisplayScript>();
         UserTag.lat = double.Parse(userLoc.x + "");
         UserTag.lon = double.Parse(userLoc.y + "");
 
