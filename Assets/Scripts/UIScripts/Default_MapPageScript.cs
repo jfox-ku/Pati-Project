@@ -30,6 +30,8 @@ public class Default_MapPageScript : UIPageScript {
     public GameObject ProvideNeedSubMenu;
     public GameObject LeftSubMenu;
     public GameObject UserSubMenu;
+    public GameObject InfoSubMenu;
+    public GameObject MapPanel;
 
     //Announcments stuff (Duyurular)
     public List<GameObject> announcementsList;
@@ -56,17 +58,17 @@ public class Default_MapPageScript : UIPageScript {
             case 0: objectScript.UpdateInformation("Acil ilaç ihtiyacı.", "Ataşehir'de. İletişim: 39450349");
                 break;
             case 1:
-                objectScript.UpdateInformation("Yavru sahiplenme.", "Eminönünde'de. İletişim: mymail@gmail.com");
+                objectScript.UpdateInformation("Yavru sahiplenme.", "Eminönün'de. İletişim: mymail@gmail.com");
                 break;
             case 2:
-                objectScript.UpdateInformation("Köpek topluluğu. Gece dikkat edin.", "Sarıyerde'de.");
+                objectScript.UpdateInformation("Köpek topluluğu. Gece dikkat edin.", "Sarıyer'de.");
                 break;
             case 3:
-                objectScript.UpdateInformation("Acil klube ihtiyacı.", "Edirne'de. İletişim: 5312943021");
+                objectScript.UpdateInformation("Acil klube ihtiyacı.", "Maslak'ta. İletişim: 5312943021");
                 break;
         }
         
-        obj.transform.position = new Vector3(startTransform.position.x, startTransform.position.y + (announcementsList.Count * -50f), startTransform.position.z);
+        obj.transform.position = new Vector3(startTransform.position.x, startTransform.position.y + (announcementsList.Count * -130f), startTransform.position.z);
 
         AnnoData AnData = objectScript.ReadAsAnnoData();
         DataManagerScript.GetInstance().SendAnnoData(AnData);
@@ -85,6 +87,7 @@ public class Default_MapPageScript : UIPageScript {
 
     }
 
+   
     public void ToggleUserMenu() {
         if (UserSubMenu.activeInHierarchy) {
             UserSubMenu.SetActive(false);
@@ -92,6 +95,28 @@ public class Default_MapPageScript : UIPageScript {
             UserSubMenu.SetActive(true);
         }
 
+    }
+     public void ToggleInfoMenu()
+        {
+            if (InfoSubMenu.activeInHierarchy)
+            {
+                InfoSubMenu.SetActive(false);
+            } else
+            {
+                InfoSubMenu.SetActive(true);
+            }
+        }
+
+    public void TogglePanel()
+    {
+        if (MapPanel.activeInHierarchy)
+        {
+            MapPanel.SetActive(false);
+        }
+        else
+        {
+            MapPanel.SetActive(true);
+        }
     }
 
     public void ToggleNeedButtons() {
