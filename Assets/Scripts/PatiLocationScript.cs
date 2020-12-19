@@ -32,7 +32,7 @@ public class PatiLocationScript : MonoBehaviour
     }
 
 
-    public void UserLocationStart(double Lat, double Lon) {
+    async public void UserLocationStart(double Lat, double Lon) {
         //* Get user location here
         UserLoc = new Vector2d(Lat, Lon);
         _map.SetCenterLatitudeLongitude(new Vector2d(Lat,Lon));
@@ -42,23 +42,17 @@ public class PatiLocationScript : MonoBehaviour
         string[] TestLocations = { "41.193139,29.049372", "41.194786,29.052225", "52.357702,4.864808", "52.355959,4.863162" };
         ListOfLocations = new List<string>();
 
-        //************** EZGI: Get all the location values from a certain cluster. Put them in a variable.
-
-        //**************
         ListOfLocations.AddRange(TestLocations);
 
-
-        //* Get all NeedData within a cluster from the server, put them into the format seen below. Make use of the ExtractLatLon and PutLatLon functions defined below.
-        //ListOfLocations = new string[] { "41.193139,29.049372", "41.194786,29.052225", "52.357702,4.864808", "52.355959,4.863162" };
-        //ListOfLocationsTest = new string[] { "41.193139,29.049372", "41.194786,29.052225", "52.357702,4.864808", "52.355959,4.863162", "41.046139,28.985556" };
-
-        //This bit is for testing the helper functions. Can be removed.
-        foreach (string cord in ListOfLocations) {
-            Vector2d vec = ExtractLatLon(cord);
-            string clstr = FindCluster(vec.x, vec.y);
-            if (CheckClusterValid(vec.x, vec.y, clstr)) {
-                //Debug.Log("Cluster No: " + clstr + "\nX: " + vec.x + "\nY: " + vec.y);
-            }
+        var DataManagerIns = DataManagerScript.GetInstance();
+        //Might have a sync issue here. 
+        await DataManagerIns.ReadMapTagsClustered(FindCluster(UserLoc.x,UserLoc.y));
+        List<NeedData> NData= DataManagerIns.GetLocalLocations();
+        if (NData == null || NData.Count == 0) {
+            Debug.LogError("No Valid NeedData recieved at PatiLocationScript");
+        }
+        foreach(NeedData nd in NData) {
+            ListOfLocations.Add(nd.GetLocationString());
         }
 
         MapSpwn.SetLocations(ListOfLocations);
@@ -70,6 +64,7 @@ public class PatiLocationScript : MonoBehaviour
     
     public void UpdateLocation() {
         //MapSpwn.UpdateAndPlaceTags(ListOfLocationsTest); //This shouldn't be test. Just to see if it updates.
+        DataManagerScript.GetInstance().ReadMapTagsFromServer();
     }
 
     public void UpdateUserLocation(double Lat, double Lon) {

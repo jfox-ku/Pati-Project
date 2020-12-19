@@ -27,5 +27,13 @@ public class NeedData : DataRoot {
     }
 
 
+    public string ToStringCustom() {
+        string ret = "Need Data created on " + CreationDate + "in cluster: " + ClusterX + ", " + ClusterY;
+        ret += "\nType: "+AnimalType+"\nCount: "+AnimalCount;
+
+        return ret;
+    }
+
+
 
 }

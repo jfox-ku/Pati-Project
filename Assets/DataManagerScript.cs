@@ -5,11 +5,14 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Auth;
 using Firebase.Unity.Editor;
-
+using System.Threading.Tasks;
 
 public class DataManagerScript : MonoBehaviour
 {
     private static DataManagerScript _instance;
+    public const string NEED_DATA = "NEED_DATA";
+    private List<NeedData> ReadFromCluster;
+
     //Move all send data to server stuff to this class. (Default_MapPageScript should not have direct connection to server, only through this class.)
     string uniqueid;
     string key;
@@ -17,6 +20,7 @@ public class DataManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ReadFromCluster = new List<NeedData>();
         if (_instance != null) {
             Debug.LogError("Can not have 2 instances of DataManagerScript");        }
 
@@ -47,6 +51,68 @@ public class DataManagerScript : MonoBehaviour
 
     }
 
+
+    public async void ReadMapTagsFromServer() {
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        DataSnapshot snapshots = await reference.Child("Ihtiyaçlar").GetValueAsync();
+        Debug.Log("Snapshot child count: " + snapshots.ChildrenCount);
+        foreach(DataSnapshot User in snapshots.Children) {
+            Debug.Log("Raw Json of child:" + User.GetRawJsonValue());
+
+            foreach(DataSnapshot ND in User.Children) {
+                Debug.Log("Raw Need Data:" + ND.GetRawJsonValue());
+                NeedData nd = JsonUtility.FromJson<NeedData>(ND.GetRawJsonValue());
+                Debug.Log(nd.ToStringCustom());
+
+            }
+
+
+        }
+
+
+    }
+
+    public async Task ReadMapTagsClustered(string cls) {
+        ReadFromCluster.Clear();
+        string[] clusters = cls.Split(',');
+        int.TryParse(clusters[0],out int cx);
+        int.TryParse(clusters[1], out int cy);
+
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        DataSnapshot snapshots = await reference.Child("Ihtiyaçlar").GetValueAsync();
+        Debug.Log("Snapshot child count: " + snapshots.ChildrenCount);
+        foreach (DataSnapshot User in snapshots.Children) {
+            //Debug.Log("Raw Json of child:" + User.GetRawJsonValue());
+
+            foreach (DataSnapshot ND in User.Children) {
+                //Debug.Log("Raw Need Data:" + ND.GetRawJsonValue());
+                NeedData nd = JsonUtility.FromJson<NeedData>(ND.GetRawJsonValue());
+                if(nd.ClusterX == cx && nd.ClusterY == cy) {
+
+                    ReadFromCluster.Add(nd);
+                }
+
+                Debug.Log(nd.ToStringCustom());
+
+            }
+
+            Debug.Log("Read " + ReadFromCluster.Count + " maptags from cluster " + cls);
+
+        }
+
+
+    }
+
+    public List<NeedData> GetLocalLocations() {
+        if (ReadFromCluster.Count == 0) {
+            Debug.LogError("Clustered Locations read empty.");
+        }
+
+
+        return ReadFromCluster;
+    }
 
 
     public async void SendNeedDataFromSubmenu(GameObject submenu) {

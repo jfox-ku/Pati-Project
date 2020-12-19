@@ -42,6 +42,10 @@ public class DataRoot
 
     }
 
+    public string GetLatLonString() {
+        return Lat +","+Lon;
+    }
+
 
 
     //Returns string representation of this object formatted as a json object
