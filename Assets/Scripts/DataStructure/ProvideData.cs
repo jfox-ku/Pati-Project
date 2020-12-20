@@ -13,7 +13,7 @@ public class ProvideData : DataRoot
 
     }
 
-    //Will add this function if base class(DataRoot) call causes errors in testing
-    //public string GetAsJson(){}
+    
+    
 
 }

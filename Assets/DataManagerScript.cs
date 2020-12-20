@@ -12,6 +12,7 @@ public class DataManagerScript : MonoBehaviour
     private static DataManagerScript _instance;
     public const string NEED_DATA = "NEED_DATA";
     private List<NeedData> ReadFromCluster;
+    private static Dictionary<NeedData, DataSnapshot> ReferenceKept;
 
     //Move all send data to server stuff to this class. (Default_MapPageScript should not have direct connection to server, only through this class.)
     string uniqueid;
@@ -21,34 +22,21 @@ public class DataManagerScript : MonoBehaviour
     void Start()
     {
         ReadFromCluster = new List<NeedData>();
+        ReferenceKept = new Dictionary<NeedData, DataSnapshot>();
+
         if (_instance != null) {
             Debug.LogError("Can not have 2 instances of DataManagerScript");        }
 
         if (_instance != this) {
             _instance = this;
         }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
         
-
-
     }
+
 
     public static DataManagerScript GetInstance() {
         return _instance;
-    }
-
-    public void AddNewMapTag() {
-
-
-    }
-
-    public void ResolveExistingMapTag(GameObject Tag) {
-
-
     }
 
 
@@ -75,6 +63,8 @@ public class DataManagerScript : MonoBehaviour
 
     public async Task ReadMapTagsClustered(string cls) {
         ReadFromCluster.Clear();
+        ReferenceKept.Clear();
+
         string[] clusters = cls.Split(',');
         int.TryParse(clusters[0],out int cx);
         int.TryParse(clusters[1], out int cy);
@@ -92,6 +82,7 @@ public class DataManagerScript : MonoBehaviour
                 if(nd.ClusterX == cx && nd.ClusterY == cy) {
 
                     ReadFromCluster.Add(nd);
+                    ReferenceKept.Add(nd, ND);
                 }
 
                 Debug.Log(nd.ToStringCustom());
@@ -113,7 +104,6 @@ public class DataManagerScript : MonoBehaviour
 
         return ReadFromCluster;
     }
-
 
     public async void SendNeedDataFromSubmenu(GameObject submenu) {
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
@@ -138,19 +128,32 @@ public class DataManagerScript : MonoBehaviour
     }
 
 
-    //Not used right now. Will update existing NeedData on the server depending on the 
     public async void UpdateNeedWithProvide(GameObject submenu) {
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-        uniqueid = Authentication.uid;
-        key = reference.Child("Provide").Push().Key;
+        NeedData Need = PatiLocationScript.GetInstance().ClosestNeedData();
+        Debug.Log("Updating closest need to user: " + Need.ToStringCustom());
 
+        DataSnapshot ClosesNeedPath = ReferenceKept[Need];
+        Debug.Log("Firebasepath: " + ClosesNeedPath.ToString());
         ProvideSubMenuScript pm = submenu.GetComponent<ProvideSubMenuScript>();
-
-
-        if (pm) { //sm is null if submenu doesn't contain the script (NeedSubMenuScript)
-            ProvideData nd = pm.ReadData();
-            string dat = nd.GetAsJson();
+        if (pm) { //pm is null if submenu doesn't contain the script (NeedSubMenuScript)
+            ProvideData pd = pm.ReadData();
+            string dat = pd.GetAsJson();
             Debug.Log("ProvideData to be calculated: " + dat);
+            //NeedData UpdatedData = ConversionBase.EditNeedData(Need, pd);
+            //Placeholder
+            NeedData UpdatedData = Need;
+            if (UpdatedData.fulfilled) {
+                await ClosesNeedPath.Reference.RemoveValueAsync();
+                Debug.Log("Need fullfilled and removed from database.");
+            } else {
+
+                //await ClosesNeedPath.Reference.SetRawJsonValueAsync(UpdatedData.GetAsJson());
+
+                Debug.Log("Server data updated on path (NOT): " + ClosesNeedPath.Reference.ToString()+"\n Data:"+UpdatedData.ToStringCustom());
+            }
+
+
 
             await reference.Child("Provide").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
 

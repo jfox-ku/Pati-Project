@@ -11,6 +11,8 @@ public class NeedData : DataRoot {
     public string AnimalType;
     public string AnimalCount;
     public string AnimalMaturity;
+
+    public bool fulfilled = false;
     
   
     public NeedData(string AType, string ACount, string AMaturity) : base(NEED_TYPE) {
@@ -30,9 +32,9 @@ public class NeedData : DataRoot {
     public string ToStringCustom() {
         string ret = "Need Data created on " + CreationDate + "in cluster: " + ClusterX + ", " + ClusterY;
         ret += "\nType: "+AnimalType+"\nCount: "+AnimalCount;
-
         return ret;
     }
+
 
 
 

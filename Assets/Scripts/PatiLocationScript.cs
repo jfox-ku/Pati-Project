@@ -20,6 +20,7 @@ public class PatiLocationScript : MonoBehaviour
     AbstractMap _map;
 
     public List<string> ListOfLocations;
+    public List<NeedData> ListofNeedData;
 
     //Testing
     public Vector2d UserLoc;
@@ -48,6 +49,7 @@ public class PatiLocationScript : MonoBehaviour
         //Might have a sync issue here. 
         await DataManagerIns.ReadMapTagsClustered(FindCluster(UserLoc.x,UserLoc.y));
         List<NeedData> NData= DataManagerIns.GetLocalLocations();
+        ListofNeedData = NData;
         if (NData == null || NData.Count == 0) {
             Debug.LogError("No Valid NeedData recieved at PatiLocationScript");
         }
@@ -64,22 +66,39 @@ public class PatiLocationScript : MonoBehaviour
     
     public void UpdateLocation() {
         //MapSpwn.UpdateAndPlaceTags(ListOfLocationsTest); //This shouldn't be test. Just to see if it updates.
-        DataManagerScript.GetInstance().ReadMapTagsFromServer();
+        //DataManagerScript.GetInstance().ReadMapTagsFromServer();
     }
 
+    //Called from UserGPS every second
     public void UpdateUserLocation(double Lat, double Lon) {
-        Debug.Log("User Location updated to: " + Lat + ", " + Lon);
+        //Debug.Log("User Location updated to: " + Lat + ", " + Lon);
         UserLoc = new Vector2d(Lat, Lon);
         reference.SetUserLocation(SafePutLatLon(Lat, Lon));
         
     }
 
+    public NeedData ClosestNeedData() {
+        NeedData closest = new NeedData("0","0","0");
+        float minDistance = float.MaxValue-1f;
+        foreach(NeedData nd in ListofNeedData) {
+            float distance = nd.GetDistanceTo(UserLoc.x, UserLoc.y);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closest = nd;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            }
+
+        }
+
+        if (closest.AnimalType != "0") {
+            return closest;
+        } else {
+            return null;
+        }
+
+
     }
+    
 
     public static string FindCluster(double lat,double lon) {
         int x = (int) Math.Round(lat / 5f);
@@ -119,7 +138,7 @@ public class PatiLocationScript : MonoBehaviour
     public static string PutLatLon(double lat, double lon) {
 
         string ret = lat + "," + lon;
-        Debug.Log("PutLatLon made: " + ret);
+        //Debug.Log("PutLatLon made: " + ret);
         return ret;
 
     }
@@ -133,7 +152,7 @@ public class PatiLocationScript : MonoBehaviour
         slon = slon.Replace(",", ".");
 
         string ret = slat + "," + slon;
-        Debug.Log("PutLatLon made: "+ret);
+        //Debug.Log("PutLatLon made: "+ret);
         return ret;
 
     }

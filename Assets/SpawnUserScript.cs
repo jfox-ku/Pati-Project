@@ -41,6 +41,7 @@ public class SpawnUserScript : MonoBehaviour
         UserTag.lat = double.Parse(userLoc.x + "");
         UserTag.lon = double.Parse(userLoc.y + "");
 
+
         instance.transform.localPosition = _map.GeoToWorldPosition(userLoc, true);
         instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
         spawnedObject = instance;

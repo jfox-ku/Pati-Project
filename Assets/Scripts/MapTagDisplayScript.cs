@@ -13,6 +13,7 @@ public class MapTagDisplayScript : MonoBehaviour
     public List<GameObject> CatVisuals;
     public float lat;
     public float lon;
+    public int count;
 
     
     public MapTagDisplayScript(string input) {
@@ -24,10 +25,10 @@ public class MapTagDisplayScript : MonoBehaviour
     }
 
     public bool ReadAndDisplayNeed(string input) {
-        DataRoot toRead = DataRoot.ReadFromJson(input);
+        NeedData toRead = DataRoot.ReadFromJson(input) as NeedData;
         if (toRead.isInit()) {
             //Placeholder until data structure is more defined
-            UpdateDisplay(1,"1,1,1");
+            UpdateDisplay(toRead);
             return true;
         } else {
             Debug.LogError("MapTag Display Error: Data is uninitalized.");
@@ -37,12 +38,10 @@ public class MapTagDisplayScript : MonoBehaviour
     }
 
 
-    public void UpdateDisplay(int Count, string Loc) {
-        foreach(GameObject Visual in CatVisuals) {
-            Visual.SetActive(false);
-        }
+    public void UpdateDisplay(NeedData Need) {
+        
 
-        CatVisuals[Count-1].SetActive(true);
+       
 
     }
 

@@ -46,6 +46,11 @@ public class DataRoot
         return Lat +","+Lon;
     }
 
+    public float GetDistanceTo(double La,double Lo) {
+        return Vector2.Distance(new Vector2((float)Lat, (float)Lon), new Vector2((float)La, (float)Lo));
+
+    }
+
 
 
     //Returns string representation of this object formatted as a json object
