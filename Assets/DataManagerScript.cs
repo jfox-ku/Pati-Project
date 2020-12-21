@@ -17,6 +17,7 @@ public class DataManagerScript : MonoBehaviour
     //Move all send data to server stuff to this class. (Default_MapPageScript should not have direct connection to server, only through this class.)
     string uniqueid;
     string key;
+    int score = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -128,7 +129,7 @@ public class DataManagerScript : MonoBehaviour
     }
 
 
-    public async void UpdateNeedWithProvide(GameObject submenu) {
+    /*public async void UpdateNeedWithProvide(GameObject submenu) {
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
         NeedData Need = PatiLocationScript.GetInstance().ClosestNeedData();
         Debug.Log("Updating closest need to user: " + Need.ToStringCustom());
@@ -153,12 +154,172 @@ public class DataManagerScript : MonoBehaviour
                 Debug.Log("Server data updated on path (NOT): " + ClosesNeedPath.Reference.ToString()+"\n Data:"+UpdatedData.ToStringCustom());
             }
 
+            await reference.Child("Provide").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
+      
+            return;
+        }
 
+    }*/
+
+    public async void UpdateNeedWithProvide(GameObject submenu)
+    {
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        uniqueid = Authentication.uid;
+        key = reference.Child("Provide").Push().Key;
+
+        ProvideSubMenuScript pm = submenu.GetComponent<ProvideSubMenuScript>();
+        NeedSubMenuScript sm = submenu.GetComponent<NeedSubMenuScript>();
+
+        if (pm)
+        { //sm is null if submenu doesn't contain the script (NeedSubMenuScript)
+            ProvideData nd = pm.ReadData();
+            string dat = nd.GetAsJson();
+            Debug.Log("ProvideData to be calculated:xx " + dat);
 
             await reference.Child("Provide").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
 
-            return;
         }
+
+        ReadUserScoresFromFirebase();
+        CalculateScores(submenu);
+        return;
+    }
+
+    //It reads all scores from firebase
+    public async void ReadUserScoresFromFirebase()
+    {
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        DataSnapshot s = await reference.Child("Score").GetValueAsync();
+
+        foreach (DataSnapshot User in s.Children)
+        {
+            Debug.Log("User Scores :" + User.GetRawJsonValue());
+
+        }
+
+
+    }
+
+    //It calculates score and send these scores to firebase
+    public async void CalculateScores(GameObject submenu)
+    {
+
+        ProvideSubMenuScript pm = submenu.GetComponent<ProvideSubMenuScript>();
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        if (pm)
+        {
+            ProvideData nd = pm.ReadData();
+            string dat = nd.GetAsJson();
+            await FirebaseDatabase.DefaultInstance.GetReference("Score").GetValueAsync().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Debug.Log("ERROR");
+                }
+                else if (task.IsCompleted)
+                {
+                    DataSnapshot snapshot = task.Result;
+                    Debug.Log("Score from firebase " + snapshot.Child(uniqueid).Value);
+                    score = (int)((long)snapshot.Child(uniqueid).Value);
+                }
+            });
+
+            //Scores for Water Amount
+            if (nd.WaterAmount == "<100 ml")
+            {
+                score = score + 10;
+            }
+            if (nd.WaterAmount == "<300ml")
+            {
+                score = score + 30;
+            }
+            if (nd.WaterAmount == "<500 ml")
+            {
+                score = score + 40;
+            }
+            if (nd.WaterAmount == ">500 ml")
+            {
+                score = score + 50;
+            }
+
+            //Scores for Mama Amount
+            if (nd.MamaAmount == "1")
+            {
+                score = score + 10;
+            }
+            if (nd.MamaAmount == "2")
+            {
+                score = score + 20;
+            }
+            if (nd.MamaAmount == "3")
+            {
+                score = score + 30;
+            }
+            if (nd.MamaAmount == "+4")
+            {
+                score = score + 40;
+            }
+
+            await reference.Child("Score").Child(uniqueid).SetValueAsync(score);
+
+            Debug.Log("Score " + score);
+        }
+
+    }
+
+    public async void AllNeedsFromFirebase()
+    {
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        DataSnapshot snapshots = await reference.Child("Ihtiyaçlar").GetValueAsync();
+
+
+        foreach (DataSnapshot User in snapshots.Children)
+        {
+            Debug.Log("AllNeedsFromFirebase : " + User.GetRawJsonValue());
+
+        }
+
+
+    }
+
+    public async void AnnouncementsFromFirebase()
+    {
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        DataSnapshot snapshots = await reference.Child("Duyuru").GetValueAsync();
+
+
+        foreach (DataSnapshot User in snapshots.Children)
+        {
+            Debug.Log("Duyurular : " + User.GetRawJsonValue());
+
+        }
+
+
+    }
+
+    //It removes announcement.
+    public async void UpdateAnnouncement(string s)
+    {
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        DataSnapshot snapshots = await reference.Child("Duyuru").GetValueAsync();
+
+
+        foreach (DataSnapshot User in snapshots.Children)
+        {
+            Debug.Log("Duyurular : " + User.GetRawJsonValue());
+            foreach (DataSnapshot duyuru in User.Children)
+            {
+
+                await FirebaseDatabase.DefaultInstance.GetReference("Ihtiyaçlar").Child(User.Key).Child(s).RemoveValueAsync().ContinueWith(task =>
+                {
+                    Debug.Log("Delete");
+
+                });
+
+            }
+
+        }
+
 
     }
 
@@ -174,6 +335,8 @@ public class DataManagerScript : MonoBehaviour
 
         await reference.Child("Duyuru").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
 
+        //UpdateAnnouncement("-MOv86QV5IfH6VrSNx1Y");
+        AnnouncementsFromFirebase();
         return;
 
 
