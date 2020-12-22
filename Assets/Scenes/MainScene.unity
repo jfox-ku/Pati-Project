@@ -4254,7 +4254,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1736998742}
         m_TargetAssemblyTypeName: PatiLocationScript, Assembly-CSharp
-        m_MethodName: UpdateLocation
+        m_MethodName: PullUpdatedTags
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8223,13 +8223,17 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: <100 ml
+    - m_Text: 0 ml
       m_Image: {fileID: 0}
-    - m_Text: <300ml
+    - m_Text: 150 ml
       m_Image: {fileID: 0}
-    - m_Text: <500 ml
+    - m_Text: 330 ml
       m_Image: {fileID: 0}
-    - m_Text: '>500 ml'
+    - m_Text: 500 ml
+      m_Image: {fileID: 0}
+    - m_Text: 1000 ml
+      m_Image: {fileID: 0}
+    - m_Text: 1500 ml
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13598,8 +13602,6 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: "K\xF6pek"
       m_Image: {fileID: 0}
-    - m_Text: "Di\u011Fer"
-      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -13738,7 +13740,13 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: 3
       m_Image: {fileID: 0}
-    - m_Text: 4+
+    - m_Text: 4
+      m_Image: {fileID: 0}
+    - m_Text: 5
+      m_Image: {fileID: 0}
+    - m_Text: 6
+      m_Image: {fileID: 0}
+    - m_Text: 7+
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13872,13 +13880,17 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: 1
+    - m_Text: 0 gr
       m_Image: {fileID: 0}
-    - m_Text: 2
+    - m_Text: 100 gr
       m_Image: {fileID: 0}
-    - m_Text: 3
+    - m_Text: 150 gr
       m_Image: {fileID: 0}
-    - m_Text: 4+
+    - m_Text: 300 gr
+      m_Image: {fileID: 0}
+    - m_Text: 500 gr
+      m_Image: {fileID: 0}
+    - m_Text: 1000 gr
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

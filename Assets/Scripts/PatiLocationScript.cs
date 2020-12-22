@@ -43,15 +43,16 @@ public class PatiLocationScript : MonoBehaviour
         string[] TestLocations = { "41.193139,29.049372", "41.194786,29.052225", "52.357702,4.864808", "52.355959,4.863162" };
         ListOfLocations = new List<string>();
 
-        ListOfLocations.AddRange(TestLocations);
+        //ListOfLocations.AddRange(TestLocations);
 
         var DataManagerIns = DataManagerScript.GetInstance();
         //Might have a sync issue here. 
         await DataManagerIns.ReadMapTagsClustered(FindCluster(UserLoc.x,UserLoc.y));
+
         List<NeedData> NData= DataManagerIns.GetLocalLocations();
         ListofNeedData = NData;
         if (NData == null || NData.Count == 0) {
-            Debug.LogError("No Valid NeedData recieved at PatiLocationScript");
+            Debug.Log("No Valid NeedData recieved at PatiLocationScript");
         }
         foreach(NeedData nd in NData) {
             ListOfLocations.Add(nd.GetLocationString());
@@ -64,9 +65,23 @@ public class PatiLocationScript : MonoBehaviour
     }
 
     
-    public void UpdateLocation() {
-        //MapSpwn.UpdateAndPlaceTags(ListOfLocationsTest); //This shouldn't be test. Just to see if it updates.
-        //DataManagerScript.GetInstance().ReadMapTagsFromServer();
+    public async void PullUpdatedTags() {
+        
+        var DataManagerIns = DataManagerScript.GetInstance();
+        await DataManagerIns.ReadMapTagsClustered(FindCluster(UserLoc.x, UserLoc.y));
+
+        List<NeedData> NData = DataManagerIns.GetLocalLocations();
+        ListofNeedData = NData;
+        if (NData == null || NData.Count == 0) {
+            Debug.Log("No Valid NeedData recieved at PatiLocationScript");
+            return;
+        }
+        foreach (NeedData nd in NData) {
+            ListOfLocations.Add(nd.GetLocationString());
+        }
+
+        MapSpwn.UpdateAndPlaceTags(ListOfLocations);
+       
     }
 
     //Called from UserGPS every second

@@ -78,9 +78,12 @@
         
 
         private void ResetTags() {
+            int i = 0;
             foreach(GameObject place in _spawnedObjects) {
-                Destroy(place);
+                Destroy(place.gameObject);
+                i++;
             }
+            Debug.Log("Reset "+i+" MapTags.");
             _spawnedObjects.Clear();
         }
 

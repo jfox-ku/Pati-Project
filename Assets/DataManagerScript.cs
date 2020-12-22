@@ -12,7 +12,7 @@ public class DataManagerScript : MonoBehaviour
     private static DataManagerScript _instance;
     public const string NEED_DATA = "NEED_DATA";
     private List<NeedData> ReadFromCluster;
-    private static Dictionary<NeedData, DataSnapshot> ReferenceKept;
+    private static Dictionary<NeedData, string> ReferenceKeptKeys;
 
     //Move all send data to server stuff to this class. (Default_MapPageScript should not have direct connection to server, only through this class.)
     string uniqueid;
@@ -23,7 +23,7 @@ public class DataManagerScript : MonoBehaviour
     void Start()
     {
         ReadFromCluster = new List<NeedData>();
-        ReferenceKept = new Dictionary<NeedData, DataSnapshot>();
+        ReferenceKeptKeys = new Dictionary<NeedData, string>();
 
         if (_instance != null) {
             Debug.LogError("Can not have 2 instances of DataManagerScript");        }
@@ -41,30 +41,31 @@ public class DataManagerScript : MonoBehaviour
     }
 
 
-    public async void ReadMapTagsFromServer() {
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+    //public async void ReadMapTagsFromServer() {
+    //    DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
 
-        DataSnapshot snapshots = await reference.Child("Ihtiyaçlar").GetValueAsync();
-        Debug.Log("Snapshot child count: " + snapshots.ChildrenCount);
-        foreach(DataSnapshot User in snapshots.Children) {
-            Debug.Log("Raw Json of child:" + User.GetRawJsonValue());
+    //    DataSnapshot snapshots = await reference.Child("Ihtiyaçlar").GetValueAsync();
+    //    //Debug.Log("Snapshot child count: " + snapshots.ChildrenCount);
+    //    foreach(DataSnapshot User in snapshots.Children) {
+    //        //Debug.Log("Raw Json of child:" + User.GetRawJsonValue());
 
-            foreach(DataSnapshot ND in User.Children) {
-                Debug.Log("Raw Need Data:" + ND.GetRawJsonValue());
-                NeedData nd = JsonUtility.FromJson<NeedData>(ND.GetRawJsonValue());
-                Debug.Log(nd.ToStringCustom());
+    //        foreach(DataSnapshot ND in User.Children) {
+    //            //Debug.Log("Raw Need Data:" + ND.GetRawJsonValue());
+    //            NeedData nd = JsonUtility.FromJson<NeedData>(ND.GetRawJsonValue());
+    //            Debug.Log(nd.ToStringCustom());
 
-            }
-
-
-        }
+    //        }
 
 
-    }
+    //    }
 
+
+    //}
+
+    //Also saves references to their paths in ReferenceKeptKeys
     public async Task ReadMapTagsClustered(string cls) {
         ReadFromCluster.Clear();
-        ReferenceKept.Clear();
+        ReferenceKeptKeys.Clear();
 
         string[] clusters = cls.Split(',');
         int.TryParse(clusters[0],out int cx);
@@ -73,7 +74,7 @@ public class DataManagerScript : MonoBehaviour
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
 
         DataSnapshot snapshots = await reference.Child("Ihtiyaçlar").GetValueAsync();
-        Debug.Log("Snapshot child count: " + snapshots.ChildrenCount);
+       // Debug.Log("Snapshot child count: " + snapshots.ChildrenCount);
         foreach (DataSnapshot User in snapshots.Children) {
             //Debug.Log("Raw Json of child:" + User.GetRawJsonValue());
 
@@ -83,7 +84,7 @@ public class DataManagerScript : MonoBehaviour
                 if(nd.ClusterX == cx && nd.ClusterY == cy) {
 
                     ReadFromCluster.Add(nd);
-                    ReferenceKept.Add(nd, ND);
+                    ReferenceKeptKeys.Add(nd, ND.Reference.ToString().Substring(ND.Reference.Root.ToString().Length - 1));
                 }
 
                 Debug.Log(nd.ToStringCustom());
@@ -99,7 +100,7 @@ public class DataManagerScript : MonoBehaviour
 
     public List<NeedData> GetLocalLocations() {
         if (ReadFromCluster.Count == 0) {
-            Debug.LogError("Clustered Locations read empty.");
+            Debug.Log("Clustered Locations read empty.");
         }
 
 
@@ -120,85 +121,97 @@ public class DataManagerScript : MonoBehaviour
             Debug.Log("NeedData to be sent: " + dat);
 
             await reference.Child("Ihtiyaçlar").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
-            
-            
+
+            PatiLocationScript.GetInstance().PullUpdatedTags();
 
 
             return;
         }
     }
 
-
-    /*public async void UpdateNeedWithProvide(GameObject submenu) {
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-        NeedData Need = PatiLocationScript.GetInstance().ClosestNeedData();
-        Debug.Log("Updating closest need to user: " + Need.ToStringCustom());
-
-        DataSnapshot ClosesNeedPath = ReferenceKept[Need];
-        Debug.Log("Firebasepath: " + ClosesNeedPath.ToString());
-        ProvideSubMenuScript pm = submenu.GetComponent<ProvideSubMenuScript>();
-        if (pm) { //pm is null if submenu doesn't contain the script (NeedSubMenuScript)
-            ProvideData pd = pm.ReadData();
-            string dat = pd.GetAsJson();
-            Debug.Log("ProvideData to be calculated: " + dat);
-            //NeedData UpdatedData = ConversionBase.EditNeedData(Need, pd);
-            //Placeholder
-            NeedData UpdatedData = Need;
-            if (UpdatedData.fulfilled) {
-                await ClosesNeedPath.Reference.RemoveValueAsync();
-                Debug.Log("Need fullfilled and removed from database.");
-            } else {
-
-                //await ClosesNeedPath.Reference.SetRawJsonValueAsync(UpdatedData.GetAsJson());
-
-                Debug.Log("Server data updated on path (NOT): " + ClosesNeedPath.Reference.ToString()+"\n Data:"+UpdatedData.ToStringCustom());
-            }
-
-            await reference.Child("Provide").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
-      
-            return;
-        }
-
-    }*/
 
     public async void UpdateNeedWithProvide(GameObject submenu)
     {
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
         uniqueid = Authentication.uid;
         key = reference.Child("Provide").Push().Key;
+        NeedData Need = PatiLocationScript.GetInstance().ClosestNeedData();
+        string ReferenceKeyNeed = ReferenceKeptKeys[Need];
+        Debug.Log("Firebase path for closest Need Data is: "+ReferenceKeyNeed);
 
         ProvideSubMenuScript pm = submenu.GetComponent<ProvideSubMenuScript>();
-        NeedSubMenuScript sm = submenu.GetComponent<NeedSubMenuScript>();
-
         if (pm)
-        { //sm is null if submenu doesn't contain the script (NeedSubMenuScript)
-            ProvideData nd = pm.ReadData();
-            string dat = nd.GetAsJson();
-            Debug.Log("ProvideData to be calculated:xx " + dat);
+        { //pm is null if submenu doesn't contain the script (ProvideSubMenuScript)
+            ProvideData pd = pm.ReadData();
+            string dat = pd.GetAsJson();
+            Debug.Log("ProvideData to be calculated: " + dat);
+            NeedData UpdatedData = ConversionBase.EditNeedData(Need, pd);
+            Debug.Log("Data Updated to: " + UpdatedData.ToStringCustom());
 
+            if (UpdatedData.fulfilled) {
+                
+
+                await reference.Child(ReferenceKeyNeed).RemoveValueAsync().ContinueWith(task => {
+                    if(task.IsCompleted)
+                    Debug.Log("Need FULFILLED! Yay! Removed it from server");
+                }
+                    );
+
+
+            } else {
+
+                await reference.Child(ReferenceKeyNeed).SetRawJsonValueAsync(UpdatedData.GetAsJson()).ContinueWith(task => {
+                    if (task.IsCompleted)
+                        Debug.Log("Need UPDATED! Check for update on server.");
+                }
+                    );
+
+            }
+
+            
+
+
+            //Saves provide data on server.
             await reference.Child("Provide").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
 
         }
 
         ReadUserScoresFromFirebase();
         CalculateScores(submenu);
+        PatiLocationScript.GetInstance().PullUpdatedTags();
         return;
     }
 
-    //It reads all scores from firebase
-    public async void ReadUserScoresFromFirebase()
-    {
+   
+
+    public async void SendAnnoData(AnnoData And) {
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-        DataSnapshot s = await reference.Child("Score").GetValueAsync();
+        uniqueid = Authentication.uid;
+        key = reference.Child("Duyuru").Push().Key;
 
-        foreach (DataSnapshot User in s.Children)
-        {
-            Debug.Log("User Scores :" + User.GetRawJsonValue());
 
-        }
+        string dat = And.GetAsJson();
+        Debug.Log("Anno to be calculated: " + dat);
+
+        await reference.Child("Duyuru").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
+
+        //UpdateAnnouncement("-MOv86QV5IfH6VrSNx1Y");
+        AnnouncementsFromFirebase();
+        return;
 
 
     }
+
+
+    //Note from jfox, 22 DEC
+    //From this points downwards are the functions written by the student mainly responsible for the database functionality.
+    //I'm sorry to write this but the below function is so unforgivabely bad that I have to leave it untouched.
+    //I need to fix this class and make the database work, instead of working on the Social aspect of the app.
+    //I can not in good conscience defend anything about this CalculateScores function. Half of it is irrelevant 
+    //copy-paste and the rest is an unusable if chain that physically hurts me when I look at it. Also, Please tell my why this function has a submenu parameter?
+    //Again, I am sorry to say this but I would expect WAY more from a near-graduate student who has put actual effort into this project.
+    //Yet, this is borderline to doing nothing and even hurting the development process,
+    //especially when demo is in 3 days.
 
     //It calculates score and send these scores to firebase
     public async void CalculateScores(GameObject submenu)
@@ -219,7 +232,7 @@ public class DataManagerScript : MonoBehaviour
                 else if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
-                    Debug.Log("Score from firebase " + snapshot.Child(uniqueid).Value);
+                    //Debug.Log("Score from firebase " + snapshot.Child(uniqueid).Value);
                     score = (int)((long)snapshot.Child(uniqueid).Value);
                 }
             });
@@ -282,6 +295,19 @@ public class DataManagerScript : MonoBehaviour
 
     }
 
+    //It reads all scores from firebase
+    public async void ReadUserScoresFromFirebase() {
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        DataSnapshot s = await reference.Child("Score").GetValueAsync();
+
+        foreach (DataSnapshot User in s.Children) {
+            // Debug.Log("User Scores :" + User.GetRawJsonValue());
+
+        }
+
+
+    }
+
     public async void AnnouncementsFromFirebase()
     {
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
@@ -324,24 +350,7 @@ public class DataManagerScript : MonoBehaviour
     }
 
 
-    public async void SendAnnoData(AnnoData And) {
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-        uniqueid = Authentication.uid;
-        key = reference.Child("Duyuru").Push().Key;
-
-
-        string dat = And.GetAsJson();
-        Debug.Log("Anno to be calculated: " + dat);
-
-        await reference.Child("Duyuru").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
-
-        //UpdateAnnouncement("-MOv86QV5IfH6VrSNx1Y");
-        AnnouncementsFromFirebase();
-        return;
-
-
-    }
-
+  
 
 
 
