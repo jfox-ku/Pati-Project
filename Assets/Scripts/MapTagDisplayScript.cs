@@ -40,9 +40,6 @@ public class MapTagDisplayScript : MonoBehaviour
 
     public void UpdateDisplay(NeedData Need) {
         
-
-       
-
     }
 
     public void DestroyMe() {

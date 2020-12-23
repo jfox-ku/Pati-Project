@@ -92,6 +92,12 @@ public class PatiLocationScript : MonoBehaviour
         reference.SetUserLocation(SafePutLatLon(Lat, Lon));
         
     }
+    private float closestdist;
+
+    public float getClosestDist()
+    {
+        return closestdist;
+    }
 
     public NeedData ClosestNeedData() {
         NeedData closest = new NeedData("0","0","0");
@@ -103,10 +109,9 @@ public class PatiLocationScript : MonoBehaviour
                 closest = nd;
 
             }
-
         }
-
         if (closest.AnimalType != "0") {
+            closestdist = minDistance;
             return closest;
         } else {
             return null;

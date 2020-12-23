@@ -108,7 +108,7 @@ public static class ConversionBase
         }
 
         public string getAsString() {
-            return "Su İhtiyacı: "+Water + "\nMama İhtiyacı: " + Food;
+            return "En yakındaki su ihtiyacı: "+Water + " ml" + "\nEn yakındaki mama ihtiyacı: " + Food + " gr";
         }
 
         public bool isEmpty() {
