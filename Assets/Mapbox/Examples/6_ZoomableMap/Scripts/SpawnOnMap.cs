@@ -29,14 +29,11 @@
             _locationStrings = inp;
         }
 
-        //Can add to this function to give more functioanlity or customization to MapTags
-        public void AddTagToLoc(string toAdd) {
-            _locationStrings.Add(toAdd);
-        }
 
         public void PlaceMapTags()
 		{
-			_locations = new Vector2d[_locationStrings.Count];
+            
+            _locations = new Vector2d[_locationStrings.Count];
 			_spawnedObjects = new List<GameObject>();
 			for (int i = 0; i < _locationStrings.Count; i++)
 			{
@@ -48,7 +45,9 @@
                 MapTag.lon = float.Parse(_locations[i].y + "");
 
                 instance.transform.localPosition = _map.GeoToWorldPosition(_locations[i], true);
-				instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
+                //instance.transform.localPosition = new Vector3(instance.transform.localPosition.x, instance.transform.localPosition.y, instance.transform.localPosition.z+1f);
+
+                instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
 				_spawnedObjects.Add(instance);
 			}
 		}
@@ -62,7 +61,7 @@
 			{
 				var spawnedObject = _spawnedObjects[i];
 				var location = _locations[i];
-				spawnedObject.transform.localPosition = _map.GeoToWorldPosition(location, true);
+				spawnedObject.transform.localPosition = _map.GeoToWorldPosition(location, true) + (transform.up * 5f);
 				spawnedObject.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
 			}
 		}
@@ -75,12 +74,16 @@
         }
 
 
+      
         
 
         private void ResetTags() {
+            _locationStrings = new List<string>();
             int i = 0;
             foreach(GameObject place in _spawnedObjects) {
-                Destroy(place.gameObject);
+                MapTagDisplayScript MTag = place.GetComponent<MapTagDisplayScript>();
+                Debug.Log(place.name+i+" at loc "+place.transform.localPosition.ToString());
+                MTag.DestroyMe();
                 i++;
             }
             Debug.Log("Reset "+i+" MapTags.");

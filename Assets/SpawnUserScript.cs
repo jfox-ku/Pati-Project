@@ -42,7 +42,7 @@ public class SpawnUserScript : MonoBehaviour
         UserTag.lon = double.Parse(userLoc.y + "");
 
 
-        instance.transform.localPosition = _map.GeoToWorldPosition(userLoc, true);
+        instance.transform.localPosition = _map.GeoToWorldPosition(userLoc, true) + (transform.up * 5f);
         instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
         spawnedObject = instance;
     }
@@ -54,7 +54,7 @@ void Update()
     {
         if (spawnedObject == null) return;
         var location = userLoc;
-        spawnedObject.transform.localPosition = _map.GeoToWorldPosition(location, true);
+        spawnedObject.transform.localPosition = _map.GeoToWorldPosition(location, true) + (transform.up * 5f);
         spawnedObject.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
     }
     

@@ -76,6 +76,7 @@ public class PatiLocationScript : MonoBehaviour
             Debug.Log("No Valid NeedData recieved at PatiLocationScript");
             return;
         }
+        ListOfLocations.Clear();
         foreach (NeedData nd in NData) {
             ListOfLocations.Add(nd.GetLocationString());
         }

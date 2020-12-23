@@ -45,6 +45,11 @@ public class MapTagDisplayScript : MonoBehaviour
 
     }
 
+    public void DestroyMe() {
+        Debug.Log("Destroy on MapTag called!");
+        Destroy(this.gameObject);
+    }
+
     public void OnMouseDown() {
         MapPageScript.ProvideNeedOnTag(this.gameObject);
     }

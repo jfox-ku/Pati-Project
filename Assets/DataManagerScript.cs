@@ -103,7 +103,7 @@ public class DataManagerScript : MonoBehaviour
             Debug.Log("Clustered Locations read empty.");
         }
 
-
+        Debug.Log(ReadFromCluster.Count+" amount of local MapTags available.");
         return ReadFromCluster;
     }
 
@@ -171,8 +171,8 @@ public class DataManagerScript : MonoBehaviour
             
 
 
-            //Saves provide data on server.
-            await reference.Child("Provide").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
+            //Saves provide data on server. Not needed anymore.
+            //await reference.Child("Provide").Child(uniqueid).Child(key).SetRawJsonValueAsync(dat);
 
         }
 
