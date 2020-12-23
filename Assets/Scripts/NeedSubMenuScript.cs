@@ -16,7 +16,7 @@ public class NeedSubMenuScript : SubMenuScript
     public NeedData ReadData() {
         string type = AnimalType.options[AnimalType.value].text;
         string count = AnimalCount.options[AnimalCount.value].text;
-        string maturity = AnimalMaturity.options[AnimalCount.value].text;
+        string maturity = AnimalMaturity.options[AnimalMaturity.value].text;
 
         return new NeedData(type,count,maturity);
 

@@ -63,7 +63,7 @@ public static class ConversionBase
         return new string(input.Where(c => char.IsDigit(c)).ToArray());
     }
 
-    struct WaterFoodPair {
+    internal struct WaterFoodPair {
         int _baseFood;
         int _baseWater;
         public int Water;
@@ -108,7 +108,7 @@ public static class ConversionBase
         }
 
         public string getAsString() {
-            return "Water: "+Water + "\nFood: " + Food;
+            return "Su İhtiyacı: "+Water + "\nMama İhtiyacı: " + Food;
         }
 
         public bool isEmpty() {
@@ -136,13 +136,13 @@ public static class ConversionBase
 
     }
 
-    struct AnimalNeed {
+    internal struct AnimalNeed {
 
         string AnimalType;
         string Maturity;
         public string Count;
         public bool fulfilled;
-        WaterFoodPair WFP;
+        internal WaterFoodPair WFP;
         
         public AnimalNeed(NeedData nd) {
             this.AnimalType = nd.AnimalType;
@@ -204,7 +204,7 @@ public static class ConversionBase
         }
 
         //count field
-        public void ProvideData(WaterFoodPair put) {
+        internal void ProvideData(WaterFoodPair put) {
             //If true, Need is depleted
             if (WFP.Reduce(put)) {
                 fulfilled = true;

@@ -11,8 +11,12 @@ public class ProvideSubMenuScript : SubMenuScript
 
     public NeedData ClosestNeed;
 
+    public MamaNeedDisplayScript MamaNeed;
+
+
     private void OnEnable() {
         ClosestNeed = FindObjectOfType<PatiLocationScript>().ClosestNeedData();
+        MamaNeed.UpdateDisplay(ClosestNeed);
         Debug.Log(ClosestNeed.ToStringCustom());
     }
 
