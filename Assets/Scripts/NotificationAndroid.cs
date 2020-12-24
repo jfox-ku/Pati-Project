@@ -7,7 +7,8 @@ public class NotificationAndroid : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        //Creates the Android Notification Channel to sned messages through.
         var channel = new AndroidNotificationChannel()
         {
             Id = "channel_id",
@@ -17,11 +18,13 @@ public class NotificationAndroid : MonoBehaviour
         };
         AndroidNotificationCenter.RegisterNotificationChannel(channel);
 
+        //Creates the Notification that is going to be sent.
         var notification = new AndroidNotification();
         notification.Title = "PATİ";
         notification.Text = "Minik doslarımızın sana her zaman ihtiyaçları olduğunu unutma!";
         notification.FireTime = System.DateTime.Now.AddSeconds(10);
 
+        //Sends the Notification
         AndroidNotificationCenter.SendNotification(notification, "channel_id");
 
     }
